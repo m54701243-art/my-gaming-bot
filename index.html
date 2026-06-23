@@ -2,377 +2,346 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>گیم زون 🎮</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pixel Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 
-  body {
-    background: #0d1117;
-    color: #e0e0e0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* THEMES */
+:root{
+  --bg:#080c10;--bg2:#0b1520;--bg3:#0e2233;
+  --accent:#1de9b6;--accent2:#29b6f6;--text:#c9d6e3;--dim:#2a4a5e;
+}
+.theme-red{--bg:#100808;--bg2:#1a0505;--bg3:#2a0808;--accent:#ff5252;--accent2:#ff8a80;--text:#ffd0d0;--dim:#5a2020;}
+.theme-purple{--bg:#0d0814;--bg2:#150d20;--bg3:#200d35;--accent:#ce93d8;--accent2:#9c27b0;--text:#e8d0f0;--dim:#4a2060;}
+.theme-orange{--bg:#100a04;--bg2:#1a1005;--bg3:#2a1a05;--accent:#ffab40;--accent2:#ff6d00;--text:#ffe0b0;--dim:#5a3010;}
+.theme-gold{--bg:#0f0e00;--bg2:#1a1800;--bg3:#2a2800;--accent:#ffe600;--accent2:#ffd600;--text:#fff9c4;--dim:#5a5000;}
 
-  /* ---- HEADER ---- */
-  .header {
-    background: linear-gradient(135deg, #0d1f2d 0%, #0a1628 100%);
-    border-bottom: 2px solid #1e3a5f;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-  .logo {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: #4fc3f7;
-    letter-spacing: 1px;
-  }
-  .logo span { color: #69f0ae; }
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;transition:background 0.4s,color 0.4s;}
 
-  .header-right { display: flex; align-items: center; gap: 10px; }
+/* ===== INTRO SCREEN ===== */
+#intro{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000;gap:16px;}
+.lang-btn-row{position:absolute;top:16px;right:16px;display:flex;gap:8px;}
+.lang-btn{background:var(--bg2);border:1px solid var(--bg3);border-radius:20px;padding:5px 10px;font-size:0.75rem;cursor:pointer;color:var(--text);display:flex;align-items:center;gap:4px;}
+.lang-btn.active{border-color:var(--accent);color:var(--accent);}
+.pixel-title{font-family:'Press Start 2P',monospace;font-size:1.6rem;color:var(--accent);text-shadow:0 0 20px var(--accent),0 0 40px var(--accent);text-align:center;line-height:2;animation:glow 2s ease-in-out infinite alternate;}
+@keyframes glow{from{text-shadow:0 0 10px var(--accent);}to{text-shadow:0 0 30px var(--accent),0 0 60px var(--accent2);}}
+.pixel-sub{font-family:'Press Start 2P',monospace;font-size:0.7rem;color:var(--accent2);text-align:center;animation:blink 1.2s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
+.start-btn{font-family:'Press Start 2P',monospace;font-size:0.75rem;background:transparent;border:2px solid var(--accent);color:var(--accent);padding:14px 32px;border-radius:4px;cursor:pointer;letter-spacing:2px;margin-top:10px;transition:0.2s;position:relative;overflow:hidden;}
+.start-btn::before{content:'';position:absolute;inset:0;background:var(--accent);opacity:0;transition:0.2s;}
+.start-btn:active::before{opacity:0.15;}
+.pixel-logo{font-family:'Press Start 2P',monospace;font-size:2.2rem;color:var(--accent);text-shadow:0 0 30px var(--accent);}
 
-  .coins-badge {
-    background: #1e3a5f;
-    border: 1px solid #4fc3f7;
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 0.85rem;
-    color: #4fc3f7;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+/* ===== MAIN APP ===== */
+#app{display:none;flex-direction:column;min-height:100vh;}
+#app.show{display:flex;}
 
-  .shop-btn {
-    background: linear-gradient(135deg, #1b5e20, #2e7d32);
-    color: #69f0ae;
-    border: 1px solid #69f0ae;
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .shop-btn:hover { background: #69f0ae; color: #000; }
+/* HEADER */
+.header{background:var(--bg2);border-bottom:1px solid var(--bg3);padding:11px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;flex-shrink:0;}
+.logo{font-family:'Press Start 2P',monospace;font-size:0.7rem;color:var(--accent);letter-spacing:1px;}
+.header-right{display:flex;align-items:center;gap:8px;}
+.coins-badge{background:var(--bg3);border:1px solid var(--dim);border-radius:20px;padding:4px 10px;font-size:0.75rem;color:var(--accent2);}
+.xp-badge{background:var(--bg3);border:1px solid var(--dim);border-radius:20px;padding:4px 10px;font-size:0.75rem;color:var(--accent);}
+.menu-btn{background:var(--bg3);border:none;color:var(--accent);width:32px;height:32px;border-radius:8px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
-  /* ---- LOBBY ---- */
-  .lobby {
-    padding: 20px 16px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
+/* LOBBY */
+.lobby{padding:14px;max-width:480px;margin:0 auto;width:100%;}
+.welcome-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.welcome-avatar{width:48px;height:48px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.welcome-info h3{font-size:0.95rem;color:var(--accent);margin-bottom:2px;}
+.welcome-info p{font-size:0.75rem;color:var(--dim);}
+.level-bar-wrap{margin-top:6px;}
+.level-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.level-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width 0.5s;}
+.level-txt{font-size:0.65rem;color:var(--dim);margin-top:2px;}
 
-  .welcome {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .welcome h2 {
-    font-size: 1.5rem;
-    color: #4fc3f7;
-    margin-bottom: 4px;
-  }
-  .welcome p { color: #666; font-size: 0.9rem; }
+.section-title{font-size:0.65rem;color:var(--accent2);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;padding-right:8px;border-right:2px solid var(--accent);}
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.game-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:0.15s;position:relative;overflow:hidden;}
+.game-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));opacity:0;transition:0.2s;}
+.game-card:active::after{opacity:1;}
+.game-card:active{transform:scale(0.96);border-color:var(--accent);}
+.game-card .gicon{width:48px;height:48px;border-radius:12px;background:var(--bg3);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.game-card h3{font-size:0.8rem;color:var(--text);margin-bottom:2px;}
+.game-card .desc{font-size:0.65rem;color:var(--dim);}
+.game-card .badge{display:inline-block;margin-top:5px;background:var(--bg3);color:var(--accent2);border-radius:8px;padding:2px 7px;font-size:0.62rem;}
+.game-card.soon{opacity:0.35;cursor:not-allowed;}
+.game-card.soon:active{transform:none;border-color:var(--bg3);}
 
-  /* ---- GAME CARDS ---- */
-  .section-title {
-    font-size: 0.8rem;
-    color: #4fc3f7;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    padding-right: 4px;
-    border-right: 3px solid #69f0ae;
-    padding-right: 10px;
-  }
+/* SIDE MENU */
+#side-menu{position:fixed;top:0;right:-280px;width:280px;height:100vh;background:var(--bg2);border-left:1px solid var(--bg3);z-index:500;transition:right 0.3s;display:flex;flex-direction:column;overflow-y:auto;}
+#side-menu.open{right:0;}
+#menu-overlay{position:fixed;inset:0;background:#0008;z-index:499;display:none;}
+#menu-overlay.open{display:block;}
+.menu-header{padding:16px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;justify-content:space-between;}
+.menu-header h3{font-family:'Press Start 2P',monospace;font-size:0.65rem;color:var(--accent);}
+.menu-close{background:none;border:none;color:var(--dim);font-size:1.2rem;cursor:pointer;}
+.menu-profile{padding:16px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:10px;}
+.menu-avatar{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.menu-user-info h4{font-size:0.85rem;color:var(--text);}
+.menu-user-info p{font-size:0.7rem;color:var(--dim);}
+.menu-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 16px;border-bottom:1px solid var(--bg3);}
+.stat-box{background:var(--bg3);border-radius:8px;padding:8px;text-align:center;}
+.stat-box .sv{font-size:1rem;font-weight:bold;color:var(--accent);}
+.stat-box .sl{font-size:0.6rem;color:var(--dim);margin-top:2px;}
+.menu-section{padding:12px 16px;}
+.menu-section h4{font-size:0.65rem;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:0.15s;margin-bottom:4px;}
+.menu-item:active{background:var(--bg3);}
+.menu-item .mi-icon{width:32px;height:32px;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.menu-item span{font-size:0.82rem;color:var(--text);}
 
-  .games-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
+/* THEME PICKER */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 12px;}
+.theme-opt{border-radius:10px;padding:10px;cursor:pointer;border:2px solid transparent;transition:0.15s;text-align:center;font-size:0.72rem;}
+.theme-opt.selected{border-color:var(--accent);}
+.theme-opt .tc{width:100%;height:28px;border-radius:6px;margin-bottom:4px;}
 
-  .game-card {
-    background: linear-gradient(145deg, #0d1f2d, #0a1628);
-    border: 1px solid #1e3a5f;
-    border-radius: 16px;
-    padding: 18px 14px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .game-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #4fc3f7, #69f0ae);
-    opacity: 0;
-    transition: 0.2s;
-  }
-  .game-card:hover::before,
-  .game-card:active::before { opacity: 1; }
-  .game-card:hover, .game-card:active {
-    border-color: #4fc3f7;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px #4fc3f722;
-  }
+/* VOLUME */
+.vol-row{display:flex;align-items:center;gap:8px;padding:0 16px 12px;}
+.vol-row input[type=range]{flex:1;accent-color:var(--accent);}
+.vol-row span{font-size:0.8rem;color:var(--dim);width:20px;}
 
-  .game-card .icon { font-size: 2.4rem; margin-bottom: 8px; }
-  .game-card h3 { font-size: 0.9rem; color: #e0e0e0; margin-bottom: 4px; }
-  .game-card .desc { font-size: 0.72rem; color: #555; }
-  .game-card .badge {
-    display: inline-block;
-    margin-top: 6px;
-    background: #1e3a5f;
-    color: #4fc3f7;
-    border-radius: 10px;
-    padding: 2px 8px;
-    font-size: 0.7rem;
-  }
-  .game-card.coming-soon { opacity: 0.5; cursor: not-allowed; }
-  .game-card.coming-soon:hover { transform: none; border-color: #1e3a5f; }
+/* GAME SELECT MODAL */
+#game-modal{display:none;position:fixed;inset:0;background:#000c;z-index:300;align-items:center;justify-content:center;}
+#game-modal.open{display:flex;}
+.game-modal-inner{background:var(--bg2);border:1px solid var(--bg3);border-radius:20px;padding:20px;width:90%;max-width:400px;max-height:88vh;overflow-y:auto;position:relative;}
+.modal-x{position:absolute;top:12px;left:12px;background:var(--bg3);color:var(--dim);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.85rem;}
+.gm-title{font-family:'Press Start 2P',monospace;font-size:0.75rem;color:var(--accent);margin-bottom:16px;text-align:center;}
+.gm-section{margin-bottom:16px;}
+.gm-label{font-size:0.7rem;color:var(--dim);margin-bottom:8px;letter-spacing:1px;}
+.gm-options{display:flex;gap:6px;flex-wrap:wrap;}
+.gm-opt{background:var(--bg3);border:1px solid var(--dim);border-radius:8px;padding:7px 14px;font-size:0.75rem;cursor:pointer;color:var(--text);transition:0.15s;}
+.gm-opt.sel{border-color:var(--accent);color:var(--accent);background:var(--bg);}
+/* MAP PREVIEWS */
+.map-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.map-preview{border-radius:10px;overflow:hidden;border:2px solid var(--bg3);cursor:pointer;transition:0.15s;aspect-ratio:1.4;}
+.map-preview.sel{border-color:var(--accent);}
+.map-preview canvas{width:100%;height:100%;display:block;}
+.map-lucky{background:linear-gradient(135deg,var(--bg3),var(--bg));border:2px dashed var(--accent);border-radius:10px;padding:14px;text-align:center;cursor:pointer;font-size:1.4rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.map-lucky span{font-size:0.65rem;color:var(--accent);}
+.map-lucky.sel{border-color:var(--accent2);background:var(--bg2);}
+.start-game-btn{width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:var(--bg);border:none;padding:12px;border-radius:12px;font-family:'Press Start 2P',monospace;font-size:0.7rem;cursor:pointer;letter-spacing:1px;margin-top:8px;}
 
-  /* ---- GAME SCREEN ---- */
-  #game-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #0d1117;
-    z-index: 200;
-    flex-direction: column;
-  }
-  #game-screen.open { display: flex; }
+/* GAME SCREEN */
+#game-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;flex-direction:column;}
+#game-screen.open{display:flex;}
+.game-topbar{background:var(--bg2);border-bottom:1px solid var(--bg3);padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.back-btn{background:var(--bg3);color:var(--accent2);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
+.game-title-bar{color:var(--accent);font-size:0.8rem;font-family:'Press Start 2P',monospace;}
+.score-row{margin-right:auto;display:flex;gap:8px;font-size:0.72rem;}
 
-  .game-topbar {
-    background: #0d1f2d;
-    border-bottom: 1px solid #1e3a5f;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .back-btn {
-    background: #1e3a5f;
-    color: #4fc3f7;
-    border: none;
-    border-radius: 50%;
-    width: 34px;
-    height: 34px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .game-title-bar { color: #4fc3f7; font-size: 1rem; font-weight: bold; }
+/* PACMAN */
+#pacman-wrap{flex:1;display:flex;flex-direction:column;align-items:center;overflow:hidden;}
+#pm-canvas-wrap{position:relative;border:1px solid var(--bg3);border-radius:8px;overflow:hidden;flex-shrink:0;}
+#pm-canvas{display:block;}
+#pm-overlay{position:absolute;inset:0;background:#000d;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;gap:8px;}
+#pm-overlay h2{font-family:'Press Start 2P',monospace;font-size:0.85rem;color:var(--accent);text-align:center;}
+#pm-overlay p{font-size:0.7rem;color:var(--dim);text-align:center;line-height:1.7;}
+#pm-overlay button{background:linear-gradient(135deg,var(--accent2),var(--accent));color:var(--bg);border:none;padding:10px 24px;border-radius:20px;font-family:'Press Start 2P',monospace;font-size:0.65rem;cursor:pointer;}
+#pm-result{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Press Start 2P',monospace;font-size:0.9rem;color:var(--accent);text-shadow:0 0 16px var(--accent);pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:20;white-space:nowrap;text-align:center;}
+#pm-result.show{opacity:1;}
 
-  #game-frame {
-    flex: 1;
-    width: 100%;
-    border: none;
-    display: block;
-  }
+/* TOUCH CONTROLS */
+#touch-area{display:grid;gap:10px;padding:8px 12px;width:100%;flex-shrink:0;}
+.ctrl-row{display:flex;gap:10px;justify-content:center;}
+.ctrl-pad{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:3px;width:110px;height:110px;}
+.ctrl-btn{background:var(--bg2);border:1px solid var(--bg3);border-radius:7px;color:var(--accent2);font-size:0.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+.ctrl-btn:active{background:var(--bg3);transform:scale(0.9);}
+.ctrl-btn.e{background:transparent;border:none;}
+.ctrl-btn.r{color:var(--accent);border-color:var(--bg3);}
+.player-label{text-align:center;font-size:0.6rem;margin-bottom:3px;}
 
-  /* ---- SHOP MODAL ---- */
-  #shop-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #000b;
-    z-index: 300;
-    align-items: flex-end;
-    justify-content: center;
-  }
-  #shop-modal.open { display: flex; }
-  .shop-inner {
-    background: #0d1f2d;
-    border: 1px solid #1e3a5f;
-    border-top-left-radius: 24px;
-    border-top-right-radius: 24px;
-    padding: 24px 20px 32px;
-    width: 100%;
-    max-width: 480px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  .shop-inner h3 {
-    color: #69f0ae;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-  }
-  .shop-coins { color: #4fc3f7; font-size: 0.9rem; margin-bottom: 16px; }
+/* SHOP */
+#shop-modal{display:none;position:fixed;inset:0;background:#000b;z-index:300;align-items:flex-end;justify-content:center;}
+#shop-modal.open{display:flex;}
+.shop-inner{background:var(--bg2);border:1px solid var(--bg3);border-top-left-radius:22px;border-top-right-radius:22px;padding:18px 16px 28px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto;position:relative;}
+.shop-inner h3{font-family:'Press Start 2P',monospace;font-size:0.7rem;color:var(--accent);margin-bottom:4px;}
+.shop-coins{color:var(--accent2);font-size:0.8rem;margin-bottom:14px;}
+.skin-section{margin-bottom:16px;}
+.skin-section h4{color:var(--dim);font-size:0.75rem;margin-bottom:8px;}
+.skins-row{display:flex;gap:8px;flex-wrap:wrap;}
+.skin-opt{width:50px;height:50px;border-radius:50%;border:2px solid var(--bg3);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;position:relative;}
+.skin-opt.selected{border-color:var(--accent);box-shadow:0 0 10px var(--accent)44;}
+.skin-opt.locked{opacity:0.35;cursor:not-allowed;}
+.lock-icon{position:absolute;bottom:1px;right:1px;font-size:0.55rem;}
 
-  .skin-section { margin-bottom: 20px; }
-  .skin-section h4 { color: #aaa; font-size: 0.85rem; margin-bottom: 10px; }
-  .skins-row { display: flex; gap: 10px; flex-wrap: wrap; }
-  .skin-opt {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 2px solid #1e3a5f;
-    background: #0a1628;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.6rem;
-    transition: 0.15s;
-    position: relative;
-  }
-  .skin-opt.selected { border-color: #69f0ae; box-shadow: 0 0 10px #69f0ae44; }
-  .skin-opt.locked { opacity: 0.4; cursor: not-allowed; }
-  .lock-icon { position: absolute; bottom: 1px; right: 1px; font-size: 0.65rem; }
-
-  .shop-close {
-    background: #1e3a5f;
-    color: #4fc3f7;
-    border: none;
-    padding: 10px 28px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    margin-top: 8px;
-    width: 100%;
-  }
-
-  /* ---- PACMAN INLINE ---- */
-  #pacman-wrap {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px 0 0;
-    overflow: hidden;
-  }
-
-  .pm-scores {
-    display: flex;
-    gap: 24px;
-    margin-bottom: 8px;
-  }
-  .pm-score-box {
-    background: #0d1f2d;
-    border: 1px solid #1e3a5f;
-    border-radius: 10px;
-    padding: 6px 18px;
-    text-align: center;
-    font-size: 0.85rem;
-  }
-  .pm-score-box span { display: block; font-size: 1.3rem; font-weight: bold; }
-  .pm-score-box.p1 span { color: #ffe600; }
-  .pm-score-box.p2 span { color: #ff5252; }
-
-  #pm-canvas-wrap {
-    position: relative;
-    border: 2px solid #1e3a5f;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  #pm-canvas { display: block; background: #0a1628; }
-
-  #pm-overlay {
-    position: absolute;
-    inset: 0;
-    background: #000a;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
-  #pm-overlay h2 { font-size: 1.5rem; color: #4fc3f7; margin-bottom: 8px; }
-  #pm-overlay p { color: #888; font-size: 0.8rem; margin-bottom: 14px; text-align: center; }
-  #pm-overlay button {
-    background: linear-gradient(135deg, #4fc3f7, #69f0ae);
-    color: #000;
-    border: none;
-    padding: 10px 30px;
-    border-radius: 24px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  #pm-result {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #69f0ae;
-    text-shadow: 0 0 16px #69f0ae;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-    z-index: 20;
-    white-space: nowrap;
-  }
-  #pm-result.show { opacity: 1; }
-
-  .pm-controls {
-    display: flex;
-    gap: 20px;
-    margin-top: 8px;
-    font-size: 0.75rem;
-    color: #555;
-    text-align: center;
-  }
+/* SOUND BTN */
+#sound-fab{position:fixed;bottom:20px;left:16px;background:var(--bg2);border:1px solid var(--bg3);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;z-index:100;box-shadow:0 4px 12px #0006;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">🎮 Game<span>Zone</span></div>
-  <div class="header-right">
-    <div class="coins-badge">🪙 <span id="coins-display">0</span></div>
-    <button class="shop-btn" onclick="openShop()">🛍️ شاپ</button>
+<!-- INTRO -->
+<div id="intro">
+  <div class="lang-btn-row">
+    <div class="lang-btn active" onclick="setLang('fa')">🇮🇷 فا</div>
+    <div class="lang-btn" onclick="setLang('en')">🇬🇧 EN</div>
+    <div class="lang-btn" onclick="setLang('ar')">🇸🇦 عر</div>
+  </div>
+  <div class="pixel-logo">PG</div>
+  <div class="pixel-title" id="intro-title">PIXEL<br>GAME</div>
+  <div class="pixel-sub" id="intro-sub">خوش آمدید</div>
+  <button class="start-btn" id="start-btn" onclick="enterApp()">شروع</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="header">
+    <div class="logo">PG</div>
+    <div class="header-right">
+      <div class="coins-badge">🪙 <span id="coins-display">0</span></div>
+      <div class="coins-badge" style="color:#a78bfa;border-color:#7c3aed44">💎 <span id="gems-display">0</span></div>
+      <div class="xp-badge">⭐ <span id="xp-display">0</span></div>
+      <button class="menu-btn" onclick="openMenu()">☰</button>
+    </div>
+  </div>
+
+  <div class="lobby" id="lobby">
+    <div class="welcome-card">
+      <div class="welcome-avatar" id="lobby-avatar">😄</div>
+      <div class="welcome-info">
+        <h3 id="lobby-greeting">درود، بازیکن!</h3>
+        <p id="lobby-sub">آماده بازی هستی؟</p>
+        <div class="level-bar-wrap">
+          <div class="level-bar"><div class="level-fill" id="xp-bar" style="width:0%"></div></div>
+          <div class="level-txt" id="level-txt">لول ۱ · ۰/۱۰۰۰ XP</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button onclick="openShop()" style="flex:1;background:var(--bg2);border:1px solid var(--bg3);color:var(--accent);border-radius:10px;padding:9px;font-size:0.78rem;cursor:pointer;">🛍️ شاپ</button>
+      <button onclick="openGameSelect()" style="flex:2;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;color:var(--bg);border-radius:10px;padding:9px;font-size:0.78rem;cursor:pointer;font-weight:bold;">▶ شروع گیم</button>
+    </div>
+
+    <div class="section-title" id="section-games">بازی‌ها</div>
+    <div class="games-grid">
+      <div class="game-card" onclick="openGameSelect('pacman')">
+        <div class="gicon">👾</div>
+        <h3>پک‌من</h3>
+        <div class="desc">دات جمع کن</div>
+        <div class="badge">۱-۴ نفره</div>
+      </div>
+      <div class="game-card soon"><div class="gicon">🐍</div><h3>مار</h3><div class="desc">بزودی</div><div class="badge">بزودی</div></div>
+      <div class="game-card soon"><div class="gicon">🏓</div><h3>پینگ پونگ</h3><div class="desc">بزودی</div><div class="badge">بزودی</div></div>
+      <div class="game-card soon"><div class="gicon">♟️</div><h3>شطرنج</h3><div class="desc">بزودی</div><div class="badge">بزودی</div></div>
+    </div>
   </div>
 </div>
 
-<!-- LOBBY -->
-<div class="lobby" id="lobby">
-  <div class="welcome">
-    <h2>سلام! 👋</h2>
-    <p>یه بازی انتخاب کن</p>
+<!-- SIDE MENU -->
+<div id="menu-overlay" onclick="closeMenu()"></div>
+<div id="side-menu">
+  <div class="menu-header">
+    <h3>MENU</h3>
+    <button class="menu-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="menu-profile">
+    <div class="menu-avatar" id="menu-avatar">😄</div>
+    <div class="menu-user-info">
+      <h4 id="menu-username">بازیکن</h4>
+      <p id="menu-level">لول ۱</p>
+    </div>
+  </div>
+  <div class="menu-stats">
+    <div class="stat-box"><div class="sv" id="stat-matches">0</div><div class="sl">مچ</div></div>
+    <div class="stat-box"><div class="sv" id="stat-wins">0</div><div class="sl">برد</div></div>
+    <div class="stat-box"><div class="sv" id="stat-xp">0</div><div class="sl">XP</div></div>
   </div>
 
-  <div class="section-title">بازی‌ها</div>
-  <div class="games-grid">
-    <div class="game-card" onclick="openGame('pacman')">
-      <div class="icon">👾</div>
-      <h3>پک‌من ۲ نفره</h3>
-      <div class="desc">پک‌من دات جمع کنه</div>
-      <div class="badge">۲ نفره</div>
+  <div class="menu-section">
+    <h4>گزینه‌ها</h4>
+    <div class="menu-item" onclick="closeMenu();openShop()">
+      <div class="mi-icon">🛍️</div><span>شاپ</span>
     </div>
-    <div class="game-card coming-soon">
-      <div class="icon">🐍</div>
-      <h3>مار</h3>
-      <div class="desc">بزودی...</div>
-      <div class="badge">بزودی</div>
+    <div class="menu-item" onclick="closeMenu();openTasks()">
+      <div class="mi-icon">📋</div><span>تسک‌ها</span>
     </div>
-    <div class="game-card coming-soon">
-      <div class="icon">🏓</div>
-      <h3>پینگ پونگ</h3>
-      <div class="desc">بزودی...</div>
-      <div class="badge">بزودی</div>
+    <div class="menu-item">
+      <div class="mi-icon">👤</div><span>پروفایل</span>
     </div>
-    <div class="game-card coming-soon">
-      <div class="icon">💣</div>
-      <h3>بمب</h3>
-      <div class="desc">بزودی...</div>
-      <div class="badge">بزودی</div>
+  </div>
+
+  <div class="menu-section">
+    <h4>تم لابی</h4>
+    <div class="theme-grid">
+      <div class="theme-opt selected" onclick="setTheme('')" id="th-default">
+        <div class="tc" style="background:linear-gradient(135deg,#0b1520,#1de9b6)"></div>
+        پیش‌فرض
+      </div>
+      <div class="theme-opt" onclick="setTheme('red')" id="th-red">
+        <div class="tc" style="background:linear-gradient(135deg,#1a0505,#ff5252)"></div>
+        قرمز
+      </div>
+      <div class="theme-opt" onclick="setTheme('purple')" id="th-purple">
+        <div class="tc" style="background:linear-gradient(135deg,#150d20,#ce93d8)"></div>
+        بنفش
+      </div>
+      <div class="theme-opt" onclick="setTheme('orange')" id="th-orange">
+        <div class="tc" style="background:linear-gradient(135deg,#1a1005,#ffab40)"></div>
+        نارنجی
+      </div>
+      <div class="theme-opt" onclick="setTheme('gold')" id="th-gold">
+        <div class="tc" style="background:linear-gradient(135deg,#1a1800,#ffe600)"></div>
+        طلایی
+      </div>
     </div>
+  </div>
+
+  <div class="menu-section">
+    <h4>صدا</h4>
+    <div class="vol-row">
+      <span>🎵</span>
+      <input type="range" min="0" max="100" value="30" id="music-vol" oninput="setMusicVol(this.value)">
+      <span id="music-vol-txt">30</span>
+    </div>
+    <div class="vol-row">
+      <span>🔊</span>
+      <input type="range" min="0" max="100" value="70" id="sfx-vol" oninput="setSfxVol(this.value)">
+      <span id="sfx-vol-txt">70</span>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SELECT MODAL -->
+<div id="game-modal">
+  <div class="game-modal-inner">
+    <button class="modal-x" onclick="closeGameModal()">✕</button>
+    <div class="gm-title">پک‌من</div>
+
+    <div class="gm-section">
+      <div class="gm-label">تعداد بازیکن</div>
+      <div class="gm-options">
+        <div class="gm-opt sel" onclick="selPlayers(1,this)">۱ نفر</div>
+        <div class="gm-opt" onclick="selPlayers(2,this)">۲ نفر</div>
+        <div class="gm-opt" onclick="selPlayers(3,this)">۳ نفر</div>
+        <div class="gm-opt" onclick="selPlayers(4,this)">۴ نفر</div>
+      </div>
+    </div>
+
+    <div class="gm-section" id="mode-section">
+      <div class="gm-label">مود بازی</div>
+      <div class="gm-options">
+        <div class="gm-opt sel" onclick="selMode('classic',this)">کلاسیک</div>
+        <div class="gm-opt" onclick="selMode('convert',this)">تبدیل تیم</div>
+        <div class="gm-opt" onclick="selMode('elim',this)">حذفی</div>
+      </div>
+    </div>
+
+    <div class="gm-section" id="team-section" style="display:none">
+      <div class="gm-label">ترکیب تیم</div>
+      <div class="gm-options" id="team-opts"></div>
+    </div>
+
+    <div class="gm-section">
+      <div class="gm-label">انتخاب مپ</div>
+      <div class="map-grid" id="map-grid"></div>
+    </div>
+
+    <button class="start-game-btn" onclick="launchGame()">شروع ▶</button>
   </div>
 </div>
 
@@ -380,322 +349,712 @@
 <div id="game-screen">
   <div class="game-topbar">
     <button class="back-btn" onclick="closeGame()">←</button>
-    <div class="game-title-bar" id="game-title-bar">بازی</div>
+    <div class="game-title-bar">PACMAN</div>
+    <div class="score-row" id="score-row"></div>
   </div>
-
-  <!-- PACMAN -->
   <div id="pacman-wrap">
-    <div class="pm-scores">
-      <div class="pm-score-box p1">🟡 پک‌من<span id="s1">0</span></div>
-      <div class="pm-score-box p2">🔴 شکارچی<span id="s2">0</span></div>
-    </div>
     <div id="pm-canvas-wrap">
       <canvas id="pm-canvas"></canvas>
       <div id="pm-result"></div>
       <div id="pm-overlay">
-        <h2>پک‌من ۲ نفره 👾</h2>
-        <p>پک‌من دات جمع کنه<br>شکارچی بگیرش!</p>
-        <button onclick="startPacman()">شروع ▶</button>
+        <h2 id="pm-ov-title">PACMAN</h2>
+        <p id="pm-ov-desc">آماده؟</p>
+        <button onclick="startPacman()">▶ شروع</button>
       </div>
     </div>
-    <div class="pm-controls">
-      <div>🟡 پک‌من<br>WASD / فلش</div>
-      <div>🔴 شکارچی<br>IJKL</div>
-    </div>
+    <div id="touch-area"></div>
   </div>
 </div>
 
-<!-- SHOP MODAL -->
+<!-- SHOP -->
 <div id="shop-modal">
   <div class="shop-inner">
-    <h3>🛍️ فروشگاه اسکین</h3>
-    <div class="shop-coins">🪙 سکه: <span id="shop-coins">0</span></div>
+    <button class="modal-x" onclick="closeShop()">✕</button>
+    <h3>SHOP</h3>
+    <div class="shop-coins">🪙 <span id="shop-coins">0</span> سکه &nbsp; 💎 <span id="shop-gems">0</span> جم</div>
     <div class="skin-section">
-      <h4>پک‌من (بازیکن ۱)</h4>
+      <h4>اسکین پک‌من</h4>
       <div class="skins-row" id="p1-skins"></div>
     </div>
     <div class="skin-section">
-      <h4>شکارچی (بازیکن ۲)</h4>
-      <div class="skins-row" id="p2-skins"></div>
+      <h4>اسکین روح‌ها (رایگان)</h4>
+      <div class="skins-row" id="ghost-skins"></div>
     </div>
-    <button class="shop-close" onclick="closeShop()">بستن ✕</button>
   </div>
 </div>
 
+<!-- TASKS MODAL -->
+<div id="tasks-modal" style="display:none;position:fixed;inset:0;background:#000b;z-index:300;align-items:flex-end;justify-content:center;">
+  <div style="background:var(--bg2);border:1px solid var(--bg3);border-top-left-radius:22px;border-top-right-radius:22px;padding:18px 16px 30px;width:100%;max-width:480px;max-height:82vh;overflow-y:auto;position:relative;">
+    <button class="modal-x" onclick="closeTasks()">✕</button>
+    <h3 style="font-family:'Press Start 2P',monospace;font-size:0.7rem;color:var(--accent);margin-bottom:4px;">TASKS</h3>
+    <div style="color:var(--accent2);font-size:0.8rem;margin-bottom:14px;">💎 <span id="tasks-gems">0</span> جم · 🪙 <span id="tasks-coins">0</span> سکه</div>
+    <div id="tasks-list"></div>
+  </div>
+</div>
+
+<!-- SOUND FAB -->
+<div id="sound-fab" onclick="toggleMusic()">🎵</div>
+
 <script>
-// ---- STORAGE ----
-let coins = parseInt(localStorage.getItem('gz_coins') || '0');
-let unlockedP1 = JSON.parse(localStorage.getItem('gz_up1') || '["s1_default"]');
-let unlockedP2 = JSON.parse(localStorage.getItem('gz_up2') || '["s2_default"]');
-let selectedP1 = localStorage.getItem('gz_sp1') || 's1_default';
-let selectedP2 = localStorage.getItem('gz_sp2') || 's2_default';
+// ===== AUDIO =====
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let actx, musicGain, sfxGain, musicPlaying=false, musicNode=null;
 
-function save() {
-  localStorage.setItem('gz_coins', coins);
-  localStorage.setItem('gz_up1', JSON.stringify(unlockedP1));
-  localStorage.setItem('gz_up2', JSON.stringify(unlockedP2));
-  localStorage.setItem('gz_sp1', selectedP1);
-  localStorage.setItem('gz_sp2', selectedP2);
+function initAudio(){
+  if(actx) return;
+  actx = new AudioCtx();
+  musicGain = actx.createGain(); musicGain.gain.value=0.3; musicGain.connect(actx.destination);
+  sfxGain = actx.createGain(); sfxGain.gain.value=0.7; sfxGain.connect(actx.destination);
+  startMusic();
 }
 
-// ---- SKINS ----
-const p1Skins = [
-  { id:'s1_default', emoji:'😄', cost:0, label:'پیش‌فرض' },
-  { id:'s1_cool', emoji:'😎', cost:30, label:'باحال' },
-  { id:'s1_fire', emoji:'🔥', cost:60, label:'آتشین' },
-  { id:'s1_angel', emoji:'😇', cost:50, label:'فرشته' },
-  { id:'s1_ninja', emoji:'🥷', cost:80, label:'نینجا' },
-];
-const p2Skins = [
-  { id:'s2_default', emoji:'👻', cost:0, label:'پیش‌فرض' },
-  { id:'s2_devil', emoji:'😈', cost:30, label:'شیطان' },
-  { id:'s2_skull', emoji:'💀', cost:60, label:'جمجمه' },
-  { id:'s2_alien', emoji:'👾', cost:50, label:'بیگانه' },
-  { id:'s2_robot', emoji:'🤖', cost:80, label:'ربات' },
-];
-
-function getEmoji(arr, id) {
-  return (arr.find(s => s.id === id) || arr[0]).emoji;
+function startMusic(){
+  if(musicPlaying||!actx) return;
+  musicPlaying=true;
+  playMusicLoop();
 }
 
-function updateCoins() {
-  document.getElementById('coins-display').textContent = coins;
-  document.getElementById('shop-coins').textContent = coins;
+function playMusicLoop(){
+  if(!musicPlaying||!actx) return;
+  // Simple ambient melody
+  const notes=[261,293,329,349,392,440,493,523];
+  let t=actx.currentTime;
+  const melody=[0,2,4,5,7,5,4,2,0,2,4,7,5,4,2,0];
+  melody.forEach((n,i)=>{
+    const o=actx.createOscillator();
+    const g=actx.createGain();
+    o.connect(g); g.connect(musicGain);
+    o.frequency.value=notes[n%notes.length];
+    o.type='sine';
+    g.gain.setValueAtTime(0,t+i*0.4);
+    g.gain.linearRampToValueAtTime(0.3,t+i*0.4+0.05);
+    g.gain.linearRampToValueAtTime(0,t+i*0.4+0.38);
+    o.start(t+i*0.4); o.stop(t+i*0.4+0.4);
+  });
+  musicNode=setTimeout(()=>{ if(musicPlaying) playMusicLoop(); }, melody.length*400+100);
 }
 
-// ---- SHOP ----
-function openShop() {
-  updateCoins();
-  renderShop();
-  document.getElementById('shop-modal').classList.add('open');
-}
-function closeShop() {
-  document.getElementById('shop-modal').classList.remove('open');
+function toggleMusic(){
+  if(!actx) initAudio();
+  musicPlaying=!musicPlaying;
+  document.getElementById('sound-fab').textContent=musicPlaying?'🎵':'🔇';
+  if(musicPlaying) playMusicLoop();
+  else { clearTimeout(musicNode); }
 }
 
-function renderShop() {
-  renderRow('p1-skins', p1Skins, unlockedP1, selectedP1, id => buyOrSelect('p1', id));
-  renderRow('p2-skins', p2Skins, unlockedP2, selectedP2, id => buyOrSelect('p2', id));
+function setMusicVol(v){
+  document.getElementById('music-vol-txt').textContent=v;
+  if(musicGain) musicGain.gain.value=v/100;
+}
+function setSfxVol(v){
+  document.getElementById('sfx-vol-txt').textContent=v;
+  if(sfxGain) sfxGain.gain.value=v/100;
 }
 
-function buyOrSelect(player, id) {
-  const arr = player === 'p1' ? p1Skins : p2Skins;
-  const unlocked = player === 'p1' ? unlockedP1 : unlockedP2;
-  const skin = arr.find(s => s.id === id);
-  if (!unlocked.includes(id)) {
-    if (coins >= skin.cost) {
-      coins -= skin.cost;
-      unlocked.push(id);
-      save(); updateCoins(); renderShop();
-    } else { alert('سکه کافی نداری! 🪙'); }
-    return;
-  }
-  if (player === 'p1') selectedP1 = id;
-  else selectedP2 = id;
-  save(); renderShop();
+function playClick(){
+  if(!actx) return;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.connect(g);g.connect(sfxGain);
+  o.frequency.value=800;o.type='square';
+  g.gain.setValueAtTime(0.3,actx.currentTime);
+  g.gain.linearRampToValueAtTime(0,actx.currentTime+0.05);
+  o.start();o.stop(actx.currentTime+0.05);
 }
 
-function renderRow(cid, skins, unlocked, selected, onClick) {
-  const c = document.getElementById(cid);
-  c.innerHTML = '';
-  skins.forEach(skin => {
-    const d = document.createElement('div');
-    d.className = 'skin-opt' +
-      (selected === skin.id ? ' selected' : '') +
-      (!unlocked.includes(skin.id) ? ' locked' : '');
-    d.title = skin.label + (unlocked.includes(skin.id) ? '' : ` (${skin.cost}🪙)`);
-    d.textContent = skin.emoji;
-    if (!unlocked.includes(skin.id)) {
-      const lk = document.createElement('span');
-      lk.className = 'lock-icon';
-      lk.textContent = '🔒';
-      d.appendChild(lk);
-    }
-    d.onclick = () => onClick(skin.id);
-    c.appendChild(d);
+function playDot(){
+  if(!actx) return;
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.connect(g);g.connect(sfxGain);
+  o.frequency.value=600+Math.random()*400;o.type='sine';
+  g.gain.setValueAtTime(0.2,actx.currentTime);
+  g.gain.linearRampToValueAtTime(0,actx.currentTime+0.08);
+  o.start();o.stop(actx.currentTime+0.08);
+}
+
+function playCatch(){
+  if(!actx) return;
+  [300,200,150].forEach((f,i)=>{
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.connect(g);g.connect(sfxGain);
+    o.frequency.value=f;o.type='sawtooth';
+    g.gain.setValueAtTime(0.3,actx.currentTime+i*0.1);
+    g.gain.linearRampToValueAtTime(0,actx.currentTime+i*0.1+0.1);
+    o.start(actx.currentTime+i*0.1);o.stop(actx.currentTime+i*0.1+0.1);
   });
 }
 
-// ---- NAVIGATION ----
-function openGame(game) {
-  document.getElementById('lobby').style.display = 'none';
-  const gs = document.getElementById('game-screen');
-  gs.classList.add('open');
-  if (game === 'pacman') {
-    document.getElementById('game-title-bar').textContent = '👾 پک‌من ۲ نفره';
-    document.getElementById('pacman-wrap').style.display = 'flex';
-    initPacman();
+document.addEventListener('click',()=>{ initAudio(); playClick(); },{passive:true});
+
+// ===== STORAGE =====
+let coins=parseInt(localStorage.getItem('pg_coins')||'0');
+let gems=parseInt(localStorage.getItem('pg_gems')||'0');
+let xp=parseInt(localStorage.getItem('pg_xp')||'0');
+let matches=parseInt(localStorage.getItem('pg_matches')||'0');
+let wins=parseInt(localStorage.getItem('pg_wins')||'0');
+let playTimeMins=parseInt(localStorage.getItem('pg_playtime')||'0');
+let selectedTheme=localStorage.getItem('pg_theme')||'';
+let unlockedSkins=JSON.parse(localStorage.getItem('pg_skins')||'["pac_default"]');
+let selectedSkin=localStorage.getItem('pg_skin')||'pac_default';
+let selectedGhost=localStorage.getItem('pg_ghost')||'ghost_0';
+let completedTasks=JSON.parse(localStorage.getItem('pg_tasks')||'[]');
+
+function save(){
+  localStorage.setItem('pg_coins',coins);
+  localStorage.setItem('pg_gems',gems);
+  localStorage.setItem('pg_xp',xp);
+  localStorage.setItem('pg_matches',matches);
+  localStorage.setItem('pg_wins',wins);
+  localStorage.setItem('pg_playtime',playTimeMins);
+  localStorage.setItem('pg_theme',selectedTheme);
+  localStorage.setItem('pg_skins',JSON.stringify(unlockedSkins));
+  localStorage.setItem('pg_skin',selectedSkin);
+  localStorage.setItem('pg_ghost',selectedGhost);
+  localStorage.setItem('pg_tasks',JSON.stringify(completedTasks));
+}
+
+// ===== TASKS =====
+const TASKS=[
+  {id:'t1',title:'۱ ساعت بازی کن',desc:'مجموع ۶۰ دقیقه بازی',icon:'⏱',reward:{gems:1000},check:()=>playTimeMins>=60},
+  {id:'t2',title:'۱۰ مچ بازی کن',desc:'۱۰ بازی شروع کن',icon:'🎮',reward:{gems:500},check:()=>matches>=10},
+  {id:'t3',title:'۵ بار ببر',desc:'۵ بازی رو ببر',icon:'🏆',reward:{gems:800},check:()=>wins>=5},
+  {id:'t4',title:'۵۰۰۰ XP جمع کن',desc:'از بازی XP بگیر',icon:'⭐',reward:{gems:1500},check:()=>xp>=5000},
+  {id:'t5',title:'اول بازی کن',desc:'اولین مچ رو شروع کن',icon:'🚀',reward:{gems:200,coins:100},check:()=>matches>=1},
+  {id:'t6',title:'۳۰ مچ بازی کن',desc:'۳۰ بازی شروع کن',icon:'🔥',reward:{gems:2000},check:()=>matches>=30},
+  {id:'t7',title:'۲۰ بار ببر',desc:'۲۰ بازی رو ببر',icon:'👑',reward:{gems:3000},check:()=>wins>=20},
+  {id:'t8',title:'۳ ساعت بازی کن',desc:'مجموع ۱۸۰ دقیقه',icon:'⌛',reward:{gems:5000},check:()=>playTimeMins>=180},
+];
+
+function openTasks(){
+  document.getElementById('tasks-gems').textContent=gems;
+  document.getElementById('tasks-coins').textContent=coins;
+  renderTasks();
+  document.getElementById('tasks-modal').style.display='flex';
+}
+function closeTasks(){ document.getElementById('tasks-modal').style.display='none'; }
+
+function renderTasks(){
+  const list=document.getElementById('tasks-list');
+  list.innerHTML='';
+  TASKS.forEach(task=>{
+    const done=completedTasks.includes(task.id);
+    const canClaim=task.check()&&!done;
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--bg3);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;opacity:'+(done?'0.5':'1');
+    const icon=document.createElement('div');
+    icon.style.cssText='font-size:1.4rem;width:36px;text-align:center;flex-shrink:0;';
+    icon.textContent=task.icon;
+    const info=document.createElement('div');
+    info.style.flex='1';
+    const rewardTxt=Object.entries(task.reward).map(([k,v])=>k==='gems'?`💎${v}`:k==='coins'?`🪙${v}`:v).join(' + ');
+    info.innerHTML=`<div style="font-size:0.82rem;color:var(--text);margin-bottom:2px">${task.title}</div><div style="font-size:0.68rem;color:var(--dim)">${task.desc}</div><div style="font-size:0.7rem;color:var(--accent);margin-top:3px">${rewardTxt}</div>`;
+    const btn=document.createElement('button');
+    btn.style.cssText='border:none;border-radius:8px;padding:7px 12px;font-size:0.72rem;cursor:pointer;flex-shrink:0;';
+    if(done){btn.textContent='✓';btn.style.background='var(--bg)';btn.style.color='var(--dim)';btn.disabled=true;}
+    else if(canClaim){btn.textContent='دریافت';btn.style.background='linear-gradient(135deg,var(--accent2),var(--accent))';btn.style.color='var(--bg)';btn.onclick=()=>claimTask(task);}
+    else{btn.textContent='در حال...';btn.style.background='var(--bg)';btn.style.color='var(--dim)';btn.disabled=true;}
+    div.appendChild(icon);div.appendChild(info);div.appendChild(btn);
+    list.appendChild(div);
+  });
+}
+
+function claimTask(task){
+  if(completedTasks.includes(task.id)) return;
+  if(task.reward.gems) gems+=task.reward.gems;
+  if(task.reward.coins) coins+=task.reward.coins;
+  completedTasks.push(task.id);
+  save();updateUI();
+  document.getElementById('tasks-gems').textContent=gems;
+  document.getElementById('tasks-coins').textContent=coins;
+  renderTasks();
+}
+
+// ===== SKINS =====
+const pacSkins=[
+  {id:'pac_default',emoji:'😄',cost:0,cur:'free',label:'پیش‌فرض'},
+  {id:'pac_cool',emoji:'😎',cost:50,cur:'gems',label:'باحال'},
+  {id:'pac_fire',emoji:'🔥',cost:80,cur:'gems',label:'آتشین'},
+  {id:'pac_ninja',emoji:'🥷',cost:150,cur:'gems',label:'نینجا'},
+  {id:'pac_angel',emoji:'😇',cost:100,cur:'gems',label:'فرشته'},
+  {id:'pac_devil',emoji:'😈',cost:100,cur:'gems',label:'شیطان'},
+  {id:'pac_crown',emoji:'👑',cost:500,cur:'gems',label:'تاج طلایی'},
+  {id:'pac_alien',emoji:'👽',cost:300,cur:'gems',label:'فضایی'},
+  {id:'pac_cat',emoji:'🐱',cost:200,cur:'gems',label:'گربه'},
+  {id:'pac_robot',emoji:'🤖',cost:250,cur:'gems',label:'ربات'},
+];
+const ghostColors=['#ff5252','#29b6f6','#69f0ae','#ffab40'];
+const ghostEmojis=['👻','💀','👾','🤖'];
+
+function getSkinEmoji(id){ return (pacSkins.find(s=>s.id===id)||pacSkins[0]).emoji; }
+
+// ===== LANG =====
+const langs={
+  fa:{intro_sub:'خوش آمدید',start:'شروع',greeting:'درود، بازیکن!',ready:'آماده بازی هستی؟'},
+  en:{intro_sub:'WELCOME',start:'START',greeting:'Welcome, Player!',ready:'Ready to play?'},
+  ar:{intro_sub:'أهلاً وسهلاً',start:'ابدأ',greeting:'مرحباً، لاعب!',ready:'هل أنت مستعد؟'},
+};
+let curLang='fa';
+function setLang(l){
+  curLang=l;
+  const d=langs[l];
+  document.getElementById('intro-sub').textContent=d.intro_sub;
+  document.getElementById('start-btn').textContent=d.start;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ===== INTRO =====
+function enterApp(){
+  document.getElementById('intro').style.display='none';
+  document.getElementById('app').classList.add('show');
+  updateUI();
+  document.getElementById('sound-fab').style.display='flex';
+}
+
+// ===== UI =====
+function updateUI(){
+  document.getElementById('coins-display').textContent=coins;
+  document.getElementById('gems-display').textContent=gems;
+  document.getElementById('xp-display').textContent=xp;
+  document.getElementById('shop-coins').textContent=coins;
+  const lvl=Math.floor(xp/1000)+1;
+  const pct=(xp%1000)/10;
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('level-txt').textContent=`لول ${lvl} · ${xp%1000}/۱۰۰۰ XP`;
+  document.getElementById('menu-level').textContent=`لول ${lvl}`;
+  document.getElementById('stat-matches').textContent=matches;
+  document.getElementById('stat-wins').textContent=wins;
+  document.getElementById('stat-xp').textContent=xp;
+  const skin=getSkinEmoji(selectedSkin);
+  document.getElementById('lobby-avatar').textContent=skin;
+  document.getElementById('menu-avatar').textContent=skin;
+}
+
+// ===== THEME =====
+function setTheme(t){
+  selectedTheme=t;
+  document.body.className=t?'theme-'+t:'';
+  document.querySelectorAll('.theme-opt').forEach(el=>el.classList.remove('selected'));
+  document.getElementById('th-'+(t||'default')).classList.add('selected');
+  save();
+}
+if(selectedTheme) setTheme(selectedTheme);
+
+// ===== MENU =====
+function openMenu(){ document.getElementById('side-menu').classList.add('open'); document.getElementById('menu-overlay').classList.add('open'); updateUI(); }
+function closeMenu(){ document.getElementById('side-menu').classList.remove('open'); document.getElementById('menu-overlay').classList.remove('open'); }
+
+// ===== SHOP =====
+function openShop(){ updateUI(); renderShop(); document.getElementById('shop-modal').classList.add('open'); }
+function closeShop(){ document.getElementById('shop-modal').classList.remove('open'); }
+
+function renderShop(){
+  document.getElementById('shop-gems').textContent=gems;
+  const c=document.getElementById('p1-skins'); c.innerHTML='';
+  pacSkins.forEach(skin=>{
+    const owned=unlockedSkins.includes(skin.id)||skin.cur==='free';
+    const d=document.createElement('div');
+    d.className='skin-opt'+(selectedSkin===skin.id?' selected':'')+(owned?'':' locked');
+    d.textContent=skin.emoji;
+    const costTxt=skin.cur==='free'?'رایگان':skin.cur==='gems'?`${skin.cost}💎`:`${skin.cost}🪙`;
+    d.title=skin.label+' · '+costTxt;
+    if(!owned){
+      const lk=document.createElement('span');lk.className='lock-icon';
+      lk.textContent=skin.cur==='gems'?'💎':'🔒';d.appendChild(lk);
+    }
+    d.onclick=()=>{
+      if(!owned){
+        if(skin.cur==='gems'){
+          if(gems>=skin.cost){gems-=skin.cost;unlockedSkins.push(skin.id);save();updateUI();renderShop();}
+          else alert('جم کافی نداری! تسک انجام بده 💎');
+        } else {
+          if(coins>=skin.cost){coins-=skin.cost;unlockedSkins.push(skin.id);save();updateUI();renderShop();}
+          else alert('سکه کافی نداری!');
+        }
+        return;
+      }
+      selectedSkin=skin.id;save();updateUI();renderShop();
+    };
+    c.appendChild(d);
+  });
+
+  const g=document.getElementById('ghost-skins'); g.innerHTML='';
+  ghostEmojis.forEach((em,i)=>{
+    const d=document.createElement('div');
+    d.className='skin-opt'+(selectedGhost==='ghost_'+i?' selected':'');
+    d.textContent=em;
+    d.onclick=()=>{ selectedGhost='ghost_'+i; save(); renderShop(); };
+    g.appendChild(d);
+  });
+}
+
+// ===== GAME SELECT =====
+let selNumPlayers=1, selMode_='classic', selTeam='', selMap=0;
+
+const MAPS=[
+  {name:'کوچیک',w:15,h:12,label:'🟦',skin:'default'},
+  {name:'متوسط',w:21,h:16,label:'🟩',skin:'default'},
+  {name:'بزرگ',w:27,h:20,label:'🟧',skin:'winter'},
+  {name:'خیلی بزرگ',w:33,h:24,label:'🟥',skin:'egypt'},
+  {name:'خیلی کوچیک',w:11,h:9,label:'🟪',skin:'default'},
+];
+
+function openGameSelect(){
+  selNumPlayers=1;selMode_='classic';selTeam='';selMap=0;
+  document.querySelectorAll('#game-modal .gm-opt').forEach(e=>e.classList.remove('sel'));
+  document.querySelector('#game-modal .gm-opt').classList.add('sel');
+  renderMapGrid();
+  updateTeamOpts();
+  document.getElementById('game-modal').classList.add('open');
+}
+function closeGameModal(){ document.getElementById('game-modal').classList.remove('open'); }
+
+function selPlayers(n,el){
+  selNumPlayers=n;
+  el.parentElement.querySelectorAll('.gm-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('team-section').style.display=n>1?'block':'none';
+  updateTeamOpts();
+}
+function selMode(m,el){
+  selMode_=m;
+  el.parentElement.querySelectorAll('.gm-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function updateTeamOpts(){
+  const c=document.getElementById('team-opts'); c.innerHTML='';
+  if(selNumPlayers<2) return;
+  const opts=[];
+  if(selNumPlayers===2) opts.push('۱ در مقابل ۱');
+  if(selNumPlayers===3){ opts.push('۱ در مقابل ۲'); opts.push('۲ در مقابل ۱'); }
+  if(selNumPlayers===4){ opts.push('۱ در مقابل ۳'); opts.push('۲ در مقابل ۲'); opts.push('۳ در مقابل ۱'); }
+  opts.push('شانسی 🎲');
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.className='gm-opt'+(i===0?' sel':'');
+    d.textContent=o;
+    d.onclick=function(){
+      this.parentElement.querySelectorAll('.gm-opt').forEach(e=>e.classList.remove('sel'));
+      this.classList.add('sel');
+      selTeam=o;
+    };
+    c.appendChild(d);
+  });
+  if(opts.length>0){ selTeam=opts[0]; c.children[0].classList.add('sel'); }
+}
+
+function renderMapGrid(){
+  const g=document.getElementById('map-grid'); g.innerHTML='';
+  MAPS.forEach((map,i)=>{
+    const wrap=document.createElement('div');
+    wrap.className='map-preview'+(selMap===i?' sel':'');
+    wrap.onclick=()=>{ selMap=i; renderMapGrid(); };
+    const cv=document.createElement('canvas');
+    cv.width=120;cv.height=86;
+    drawMapPreview(cv,map);
+    wrap.appendChild(cv);
+    g.appendChild(wrap);
+  });
+  // Lucky map
+  const lucky=document.createElement('div');
+  lucky.className='map-lucky'+(selMap===-1?' sel':'');
+  lucky.innerHTML='🎲<span>مپ شانسی</span>';
+  lucky.onclick=()=>{ selMap=-1; renderMapGrid(); };
+  g.appendChild(lucky);
+}
+
+function drawMapPreview(cv,map){
+  const ctx=cv.getContext('2d');
+  const cw=cv.width,ch=cv.height;
+  const cs=Math.min(Math.floor(cw/map.w),Math.floor(ch/map.h));
+  const ox=Math.floor((cw-cs*map.w)/2),oy=Math.floor((ch-cs*map.h)/2);
+  // bg
+  ctx.fillStyle=map.skin==='winter'?'#0d1f3c':map.skin==='egypt'?'#2a1a05':'#080c10';
+  ctx.fillRect(0,0,cw,ch);
+  // dots
+  const dotColor=map.skin==='winter'?'#4fc3f7':map.skin==='egypt'?'#ffab40':'#1de9b6';
+  for(let r=0;r<map.h;r++)
+    for(let c=0;c<map.w;c++){
+      if(Math.random()>0.6){
+        ctx.fillStyle=dotColor+'88';
+        ctx.beginPath();
+        ctx.arc(ox+c*cs+cs/2,oy+r*cs+cs/2,cs*0.15,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+  // border
+  ctx.strokeStyle=dotColor+'44';
+  ctx.lineWidth=1;
+  ctx.strokeRect(ox,oy,cs*map.w,cs*map.h);
+  // name
+  ctx.fillStyle=dotColor;
+  ctx.font=`bold ${Math.max(8,cs*1.5)}px Segoe UI`;
+  ctx.textAlign='center';ctx.textBaseline='bottom';
+  ctx.fillText(map.name,cw/2,ch-2);
+}
+
+// ===== LAUNCH GAME =====
+let gameConfig={};
+function launchGame(){
+  let map=selMap===-1?MAPS[Math.floor(Math.random()*MAPS.length)]:MAPS[selMap];
+  gameConfig={players:selNumPlayers,mode:selMode_,team:selTeam,map:map};
+  closeGameModal();
+  openGame();
+}
+
+// ===== GAME =====
+function openGame(){
+  document.getElementById('lobby').style.display='none';
+  document.getElementById('game-screen').classList.add('open');
+  initPacman();
+}
+function closeGame(){
+  stopPacman();
+  document.getElementById('game-screen').classList.remove('open');
+  document.getElementById('lobby').style.display='block';
+}
+
+// ===== PACMAN ENGINE =====
+const canvas=document.getElementById('pm-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,CELL,COLS,ROWS;
+let dots=[],players=[],animId,gameRunning=false,roundTime=60,timerInt;
+let scores=[];
+
+const PLAYER_COLORS=['#ffe600','#ff5252','#29b6f6','#69f0ae'];
+const PLAYER_EMOJIS_DEFAULT=['😄','👻','🤖','👾'];
+
+function initPacman(){
+  const vw=Math.min(window.innerWidth,480);
+  const map=gameConfig.map||MAPS[1];
+  COLS=map.w; ROWS=map.h;
+  CELL=Math.max(14,Math.floor(Math.min(vw/COLS,(window.innerHeight*0.45)/ROWS)));
+  W=COLS*CELL; H=ROWS*CELL;
+  canvas.width=W; canvas.height=H;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  buildTouchControls();
+  buildScoreRow();
+  document.getElementById('pm-overlay').style.display='flex';
+  document.getElementById('pm-ov-title').textContent='PACMAN';
+  document.getElementById('pm-ov-desc').textContent=`${gameConfig.players} نفره · ${gameConfig.map.name}`;
+}
+
+function buildScoreRow(){
+  const row=document.getElementById('score-row'); row.innerHTML='';
+  for(let i=0;i<gameConfig.players;i++){
+    const s=document.createElement('span');
+    s.style.color=PLAYER_COLORS[i];
+    s.id='sc'+i;
+    s.textContent='● 0';
+    row.appendChild(s);
   }
 }
 
-function closeGame() {
-  stopPacman();
-  document.getElementById('game-screen').classList.remove('open');
-  document.getElementById('pacman-wrap').style.display = 'none';
-  document.getElementById('lobby').style.display = 'block';
+function buildTouchControls(){
+  const area=document.getElementById('touch-area');
+  area.innerHTML='';
+  const n=gameConfig.players;
+  if(n===1){
+    area.style.gridTemplateColumns='1fr';
+    area.appendChild(makePad(0));
+  } else if(n===2){
+    area.style.gridTemplateColumns='1fr 1fr';
+    area.appendChild(makePad(0)); area.appendChild(makePad(1));
+  } else if(n===3){
+    area.style.gridTemplateColumns='1fr 1fr 1fr';
+    for(let i=0;i<3;i++) area.appendChild(makePad(i));
+  } else {
+    area.style.gridTemplateColumns='1fr 1fr';
+    for(let i=0;i<4;i++) area.appendChild(makePad(i));
+  }
 }
 
-// ---- PACMAN ----
-const canvas = document.getElementById('pm-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, CELL, COLS, ROWS;
-
-function initPacman() {
-  const wrap = document.getElementById('pm-canvas-wrap');
-  const avail = Math.min(window.innerWidth - 16, 480);
-  W = avail; H = Math.floor(avail * 0.72);
-  canvas.width = W; canvas.height = H;
-  CELL = 26;
-  COLS = Math.floor(W / CELL);
-  ROWS = Math.floor(H / CELL);
-  document.getElementById('pm-overlay').style.display = 'flex';
+function makePad(i){
+  const wrap=document.createElement('div');
+  const lbl=document.createElement('div');
+  lbl.className='player-label';
+  lbl.style.color=PLAYER_COLORS[i];
+  lbl.textContent=`P${i+1}`;
+  wrap.appendChild(lbl);
+  const pad=document.createElement('div');
+  pad.className='ctrl-pad';
+  const dirs=[[null],[0,-1],[null],[-1,0],[null],[1,0],[null],[0,1],[null]];
+  const icons=['','▲','','◄','','►','','▼',''];
+  dirs.forEach((d,j)=>{
+    const btn=document.createElement('div');
+    if(d[0]===null){btn.className='ctrl-btn e';}
+    else{
+      btn.className='ctrl-btn'+(i>0?' r':'');
+      btn.textContent=icons[j];
+      btn.addEventListener('touchstart',e=>{e.preventDefault();setPlayerDir(i,d[0],d[1]);},{passive:false});
+      btn.addEventListener('mousedown',()=>setPlayerDir(i,d[0],d[1]));
+    }
+    pad.appendChild(btn);
+  });
+  wrap.appendChild(pad);
+  return wrap;
 }
 
-let dots=[], p1={}, p2={}, keys={}, animId, gameRunning=false;
-let roundTime=45, timerInt;
-let score1=0, score2=0;
+function setPlayerDir(i,dx,dy){ if(!gameRunning||!players[i])return; players[i].dx=dx; players[i].dy=dy; }
 
-function makeDots() {
-  dots = [];
-  for (let r=1; r<ROWS-1; r++)
-    for (let c=1; c<COLS-1; c++)
-      if (Math.random() > 0.28) dots.push({ x:c, y:r, big: Math.random()<0.07 });
+function makeDots(){
+  dots=[];
+  for(let r=1;r<ROWS-1;r++)
+    for(let c=1;c<COLS-1;c++)
+      if(Math.random()>0.22) dots.push({x:c,y:r,big:Math.random()<0.06});
 }
 
-function startPacman() {
-  document.getElementById('pm-overlay').style.display = 'none';
+function startPacman(){
+  document.getElementById('pm-overlay').style.display='none';
   makeDots();
-  p1 = { x:2, y:2, dx:1, dy:0, speed:0.08 };
-  p2 = { x:COLS-3, y:ROWS-3, dx:-1, dy:0, speed:0.065 };
-  score1=0; score2=0;
-  updateScore();
-  roundTime=45;
+  const n=gameConfig.players;
+  const starts=[
+    {x:2,y:2},{x:COLS-3,y:ROWS-3},{x:COLS-3,y:2},{x:2,y:ROWS-3}
+  ];
+  players=[];scores=[];
+  for(let i=0;i<n;i++){
+    players.push({...starts[i],dx:i%2===0?1:-1,dy:0,speed:0.065});
+    scores.push(0);
+  }
+  updateScores();
+  roundTime=gameConfig.map.w>20?60:45;
   gameRunning=true;
   clearInterval(timerInt);
-  timerInt = setInterval(() => { if (!gameRunning) return; roundTime--; if (roundTime<=0) endRound('⏰ وقت تموم شد!'); }, 1000);
-  if (animId) cancelAnimationFrame(animId);
+  let playSeconds=0;
+  timerInt=setInterval(()=>{
+    if(!gameRunning)return;
+    roundTime--;
+    playSeconds++;
+    if(playSeconds%60===0){ playTimeMins++; save(); }
+    if(roundTime<=0)endRound('وقت تموم شد!');
+  },1000);
+  if(animId)cancelAnimationFrame(animId);
   loop();
+  matches++;save();
 }
 
-function stopPacman() {
-  gameRunning=false;
-  clearInterval(timerInt);
-  if (animId) cancelAnimationFrame(animId);
-}
+function stopPacman(){ gameRunning=false; clearInterval(timerInt); if(animId)cancelAnimationFrame(animId); }
 
-function endRound(msg) {
-  gameRunning=false;
-  clearInterval(timerInt);
-  cancelAnimationFrame(animId);
-  const winner = score1>score2 ? '🟡 پک‌من برنده!' : score2>score1 ? '🔴 شکارچی برنده!' : '🤝 مساوی!';
-  const rm = document.getElementById('pm-result');
-  rm.textContent = winner; rm.classList.add('show');
-  setTimeout(() => {
+function endRound(msg){
+  gameRunning=false;clearInterval(timerInt);cancelAnimationFrame(animId);
+  const maxScore=Math.max(...scores);
+  const winIdx=scores.indexOf(maxScore);
+  const winner=`P${winIdx+1} برنده!`;
+  wins++;
+  const earnedXP=maxScore*2;
+  xp+=earnedXP; coins+=Math.floor(maxScore/2);
+  save();updateUI();
+  const rm=document.getElementById('pm-result');
+  rm.innerHTML=winner+'<br><span style="font-size:0.5em;color:var(--accent2)">+'+earnedXP+' XP</span>';
+  rm.classList.add('show');
+  setTimeout(()=>{
     rm.classList.remove('show');
-    const ov = document.getElementById('pm-overlay');
-    ov.querySelector('h2').textContent = winner;
-    ov.querySelector('p').textContent = msg + ' | دوباره بازی کن!';
-    ov.style.display = 'flex';
-  }, 1800);
+    const ov=document.getElementById('pm-overlay');
+    ov.querySelector('h2').textContent=winner;
+    ov.querySelector('p').textContent=msg;
+    ov.style.display='flex';
+  },2200);
 }
 
-function updateScore() {
-  document.getElementById('s1').textContent = score1;
-  document.getElementById('s2').textContent = score2;
+function updateScores(){
+  for(let i=0;i<players.length;i++){
+    const el=document.getElementById('sc'+i);
+    if(el) el.textContent=`● ${scores[i]}`;
+  }
 }
 
-function loop() {
-  if (!gameRunning) return;
-  update(); draw();
-  animId = requestAnimationFrame(loop);
-}
+function loop(){ if(!gameRunning)return; update(); draw(); animId=requestAnimationFrame(loop); }
 
-function update() {
-  if (keys['ArrowUp']||keys['w']||keys['W']) { p1.dx=0; p1.dy=-1; }
-  if (keys['ArrowDown']||keys['s']||keys['S']) { p1.dx=0; p1.dy=1; }
-  if (keys['ArrowLeft']||keys['a']||keys['A']) { p1.dx=-1; p1.dy=0; }
-  if (keys['ArrowRight']||keys['d']||keys['D']) { p1.dx=1; p1.dy=0; }
-  if (keys['i']||keys['I']) { p2.dx=0; p2.dy=-1; }
-  if (keys['k']||keys['K']) { p2.dx=0; p2.dy=1; }
-  if (keys['j']||keys['J']) { p2.dx=-1; p2.dy=0; }
-  if (keys['l']||keys['L']) { p2.dx=1; p2.dy=0; }
+function update(){
+  players.forEach((p,i)=>{
+    p.x+=p.dx*p.speed; p.y+=p.dy*p.speed;
+    p.x=Math.max(0.5,Math.min(COLS-1.5,p.x));
+    p.y=Math.max(0.5,Math.min(ROWS-1.5,p.y));
+  });
 
-  p1.x += p1.dx*p1.speed; p1.y += p1.dy*p1.speed;
-  p2.x += p2.dx*p2.speed; p2.y += p2.dy*p2.speed;
-
-  p1.x = Math.max(0.5, Math.min(COLS-1.5, p1.x));
-  p1.y = Math.max(0.5, Math.min(ROWS-1.5, p1.y));
-  p2.x = Math.max(0.5, Math.min(COLS-1.5, p2.x));
-  p2.y = Math.max(0.5, Math.min(ROWS-1.5, p2.y));
-
-  dots = dots.filter(dot => {
-    const dx=dot.x-p1.x, dy=dot.y-p1.y;
-    if (Math.sqrt(dx*dx+dy*dy)<0.7) {
+  // dot collection by P1 (pacman)
+  dots=dots.filter(dot=>{
+    const dx=dot.x-players[0].x,dy=dot.y-players[0].y;
+    if(Math.sqrt(dx*dx+dy*dy)<0.7){
       const pts=dot.big?5:1;
-      score1+=pts; coins+=dot.big?3:1;
-      save(); updateCoins(); updateScore();
-      return false;
+      scores[0]+=pts;xp+=pts;coins+=1;
+      playDot();save();updateUI();updateScores();return false;
     }
     return true;
   });
 
-  const cdx=p1.x-p2.x, cdy=p1.y-p2.y;
-  if (Math.sqrt(cdx*cdx+cdy*cdy)<1) {
-    score2+=10; coins+=5;
-    save(); updateCoins(); updateScore();
-    p1.x=Math.random()*(COLS-4)+2;
-    p1.y=Math.random()*(ROWS-4)+2;
+  // ghost catch pacman
+  for(let i=1;i<players.length;i++){
+    const dx=players[0].x-players[i].x,dy=players[0].y-players[i].y;
+    if(Math.sqrt(dx*dx+dy*dy)<1){
+      scores[i]+=10;playCatch();updateScores();
+      players[0].x=Math.random()*(COLS-4)+2;
+      players[0].y=Math.random()*(ROWS-4)+2;
+    }
   }
 
-  if (dots.length===0) endRound('همه دات‌ها جمع شد!');
+  if(dots.length===0) endRound('همه دات‌ها جمع شد!');
 }
 
-function draw() {
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#0a1628';
-  ctx.fillRect(0,0,W,H);
+const mapSkinColors={
+  default:{bg:'#080c10',dot:'#0e2a3a',bigDot:'#ffe600',border:'#0e2233'},
+  winter:{bg:'#0d1f3c',dot:'#1a3a5c',bigDot:'#4fc3f7',border:'#1e3a5f'},
+  egypt:{bg:'#1a0e00',dot:'#3a2000',bigDot:'#ffab40',border:'#2a1500'},
+};
 
-  dots.forEach(dot => {
-    const px=dot.x*CELL+CELL/2, py=dot.y*CELL+CELL/2;
-    if (dot.big) {
-      ctx.shadowBlur=10; ctx.shadowColor='#ffe600';
-      ctx.fillStyle='#ffe600';
-      ctx.beginPath(); ctx.arc(px,py,6,0,Math.PI*2); ctx.fill();
+function draw(){
+  const skin=mapSkinColors[gameConfig.map?.skin||'default'];
+  ctx.fillStyle=skin.bg;ctx.fillRect(0,0,W,H);
+
+  dots.forEach(dot=>{
+    const px=dot.x*CELL+CELL/2,py=dot.y*CELL+CELL/2;
+    if(dot.big){
+      ctx.shadowBlur=10;ctx.shadowColor=skin.bigDot;
+      ctx.fillStyle=skin.bigDot;
+      ctx.beginPath();ctx.arc(px,py,CELL*0.22,0,Math.PI*2);ctx.fill();
       ctx.shadowBlur=0;
     } else {
-      ctx.fillStyle='#1e3a5f';
-      ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle=skin.dot;
+      ctx.beginPath();ctx.arc(px,py,CELL*0.12,0,Math.PI*2);ctx.fill();
     }
   });
 
-  const barW = W*(roundTime/45);
-  ctx.fillStyle = roundTime<10?'#ff5252':'#4fc3f7';
-  ctx.fillRect(0,0,barW,4);
+  // timer
+  ctx.fillStyle=roundTime<10?'#ff5252':'var(--accent, #1de9b6)';
+  ctx.fillRect(0,0,W*(roundTime/60),3);
+  ctx.font=`bold ${Math.max(9,CELL*0.45)}px Segoe UI`;
+  ctx.textAlign='center';ctx.textBaseline='top';
+  ctx.fillStyle=roundTime<10?'#ff5252':'#29b6f6';
+  ctx.fillText(roundTime+'s',W/2,4);
 
-  ctx.font=`${CELL}px serif`;
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-
-  ctx.shadowBlur=12; ctx.shadowColor='#ffe600';
-  ctx.fillText(getEmoji(p1Skins,selectedP1), p1.x*CELL+CELL/2, p1.y*CELL+CELL/2);
-  ctx.shadowBlur=0;
-
-  ctx.shadowBlur=12; ctx.shadowColor='#ff5252';
-  ctx.fillText(getEmoji(p2Skins,selectedP2), p2.x*CELL+CELL/2, p2.y*CELL+CELL/2);
-  ctx.shadowBlur=0;
-
-  ctx.font='bold 13px Segoe UI';
-  ctx.fillStyle=roundTime<10?'#ff5252':'#4fc3f7';
-  ctx.textAlign='center';
-  ctx.fillText(`⏱ ${roundTime}s`, W/2, 16);
+  // players
+  ctx.textBaseline='middle';
+  players.forEach((p,i)=>{
+    const px=p.x*CELL+CELL/2,py=p.y*CELL+CELL/2;
+    ctx.shadowBlur=12;ctx.shadowColor=PLAYER_COLORS[i];
+    ctx.font=`${Math.floor(CELL*0.85)}px serif`;
+    ctx.textAlign='center';
+    const em=i===0?getSkinEmoji(selectedSkin):ghostEmojis[parseInt(selectedGhost.split('_')[1])||0];
+    ctx.fillText(em,px,py);
+    ctx.shadowBlur=0;
+  });
 }
 
-document.addEventListener('keydown', e => {
-  keys[e.key]=true;
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+// keyboard
+document.addEventListener('keydown',e=>{
+  const km={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],w:[0,-1],s:[0,1],a:[-1,0],d:[1,0]};
+  const km2={i:[0,-1],k:[0,1],j:[-1,0],l:[1,0]};
+  const km3={t:[0,-1],g:[0,1],f:[-1,0],h:[1,0]};
+  const km4={ArrowUp2:[0,-1]};
+  if(km[e.key]) setPlayerDir(0,...km[e.key]);
+  if(km2[e.key]) setPlayerDir(1,...km2[e.key]);
+  if(km3[e.key]) setPlayerDir(2,...km3[e.key]);
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
 });
-document.addEventListener('keyup', e => { keys[e.key]=false; });
 
-updateCoins();
+// init
+updateUI();
+document.getElementById('sound-fab').style.display='none';
 </script>
 </body>
 </html>
