@@ -851,9 +851,9 @@ function enterApp(){
   document.getElementById('intro').style.display='none';
   document.getElementById('app').classList.add('show');
   document.getElementById('sfab').style.display='flex';
-  applyTOD();
+  try{applyTOD();}catch(e){console.log('TOD error:',e);}
   updateUI();
-  drawPacPreview();
+  try{drawPacPreview();}catch(e){}
 }
 
 function showPage(p,el){document.querySelectorAll('.sb-item').forEach(e=>e.classList.remove('active'));if(el)el.classList.add('active');}
