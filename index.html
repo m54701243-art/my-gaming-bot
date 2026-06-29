@@ -34,7 +34,7 @@ body.tod-night{background:#05051a;}
 .intro-start:active{transform:scale(0.96);}
 
 /* APP */
-#app{display:none;height:100vh;flex-direction:column;overflow:hidden;position:relative;}
+#app{display:none;height:100vh;flex-direction:column;overflow:hidden;position:relative;}#app.show{display:flex!important;flex-direction:column;}
 #app.show{display:flex;}
 
 /* BG PARALLAX */
@@ -816,11 +816,14 @@ function toggleMoreGames(btn){const eg=document.getElementById('extra-games');co
 
 function toggleMoreGames(btn){const eg=document.getElementById('extra-games');const isShow=eg.classList.toggle('show');btn.textContent=isShow?'▲ بستن':'▼ انتخاب بازی های بیشتر';}
 function enterApp(){
-  document.getElementById('intro').style.display='none';
-  document.getElementById('app').classList.add('show');
-  document.getElementById('sfab').style.display='flex';
-  try{applyTOD();}catch(e){console.log('TOD error:',e);}
-  updateUI();
+  var intro=document.getElementById('intro');
+  var app=document.getElementById('app');
+  var sfab=document.getElementById('sfab');
+  if(intro)intro.style.cssText='display:none!important';
+  if(app){app.style.display='flex';app.style.flexDirection='column';app.style.height='100vh';}
+  if(sfab)sfab.style.display='flex';
+  try{applyTOD();}catch(e){}
+  try{updateUI();}catch(e){}
   try{drawPacPreview();}catch(e){}
 }
 
