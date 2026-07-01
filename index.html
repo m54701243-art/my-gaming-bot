@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="google" content="notranslate">
 <title>Galaxy Intro</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Audiowide&family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Vazirmatn',sans-serif;}
@@ -27,35 +28,49 @@
   /* ===== TITLE + CONTENT ===== */
   .intro-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px;text-align:center;}
 
-  .title-wrap{position:relative;}
+  .title-wrap{position:relative;perspective:800px;}
   .pixel-guard-title{
-    font-family:'Orbitron',sans-serif;
-    font-weight:900;
-    font-size:clamp(2.2rem,9vw,4.2rem);
-    letter-spacing:5px;
+    font-family:'Audiowide','Orbitron',sans-serif;
+    font-weight:400;
+    font-size:clamp(2.4rem,10vw,4.6rem);
+    letter-spacing:6px;
     line-height:1.1;
-    background:linear-gradient(180deg,#ffffff 0%,#d9c6ff 35%,#a855f7 70%,#6d28d9 100%);
+    position:relative;
+    color:#f4ecff;
+    background:linear-gradient(180deg,#ffffff 0%,#e9d5ff 25%,#c084fc 55%,#8b3ff0 80%,#5b21b6 100%);
     -webkit-background-clip:text;
     background-clip:text;
     -webkit-text-fill-color:transparent;
-    position:relative;
-    filter:drop-shadow(0 0 18px #a855f7cc) drop-shadow(0 0 40px #7c3aed88);
-    transform:perspective(400px) rotateX(8deg);
-    animation:floatTitle 4s ease-in-out infinite;
+    filter:
+      drop-shadow(0 1px 0 #ffffff55)
+      drop-shadow(0 0 12px #c084fcbb)
+      drop-shadow(0 0 34px #a855f799)
+      drop-shadow(0 0 70px #7c3aed66);
+    transform:rotateX(14deg);
+    transform-style:preserve-3d;
+    animation:floatTitle 5s ease-in-out infinite;
+  }
+  .pixel-guard-title::before{
+    content:attr(data-text);
+    position:absolute;left:0;top:0;width:100%;
+    font-family:'Audiowide','Orbitron',sans-serif;letter-spacing:6px;
+    color:transparent;
+    -webkit-text-stroke:1.5px #ffffff2a;
+    z-index:-1;
+    transform:translateZ(-6px) translateY(3px);
   }
   .pixel-guard-title::after{
     content:attr(data-text);
     position:absolute;left:0;top:0;width:100%;
-    font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:5px;
-    background:none;-webkit-text-fill-color:transparent;
+    font-family:'Audiowide','Orbitron',sans-serif;letter-spacing:6px;
     color:transparent;
-    -webkit-text-stroke:1px #ffffff33;
-    z-index:-1;
-    transform:translate(3px,5px);
+    -webkit-text-stroke:1.5px #4c1d9555;
+    z-index:-2;
+    transform:translateZ(-16px) translateY(9px);
   }
   @keyframes floatTitle{
-    0%,100%{transform:perspective(400px) rotateX(8deg) translateY(0px);}
-    50%{transform:perspective(400px) rotateX(4deg) translateY(-6px);}
+    0%,100%{transform:rotateX(14deg) translateY(0px);}
+    50%{transform:rotateX(8deg) translateY(-8px);}
   }
 
   .welcome-small{font-family:'Orbitron',sans-serif;font-size:clamp(0.5rem,2.2vw,0.75rem);color:#c4b5fdaa;letter-spacing:7px;margin-top:-6px;}
@@ -89,12 +104,12 @@
 <div id="intro">
   <canvas id="galaxy-cv"></canvas>
 
-  <div class="lang-row">
-    <div class="lang-btn active" data-lang="en" onclick="setLang('en',this)"><div class="lang-flag">🇬🇧</div><div class="lang-name">English</div></div>
-    <div class="lang-btn" data-lang="fa" onclick="setLang('fa',this)"><div class="lang-flag">🇮🇷</div><div class="lang-name">فارسی</div></div>
-    <div class="lang-btn" data-lang="tr" onclick="setLang('tr',this)"><div class="lang-flag">🇹🇷</div><div class="lang-name">Türkçe</div></div>
-    <div class="lang-btn" data-lang="ar" onclick="setLang('ar',this)"><div class="lang-flag">🇸🇦</div><div class="lang-name">العربية</div></div>
-    <div class="lang-btn" data-lang="zh" onclick="setLang('zh',this)"><div class="lang-flag">🇨🇳</div><div class="lang-name">中文</div></div>
+  <div class="lang-row" translate="no">
+    <div class="lang-btn active" data-lang="en" onclick="setLang('en',this)"><div class="lang-flag">🇬🇧</div><div class="lang-name" style="font-family:'Vazirmatn',sans-serif">English</div></div>
+    <div class="lang-btn" data-lang="fa" onclick="setLang('fa',this)"><div class="lang-flag">🇮🇷</div><div class="lang-name" style="font-family:'Vazirmatn',sans-serif">فارسی</div></div>
+    <div class="lang-btn" data-lang="tr" onclick="setLang('tr',this)"><div class="lang-flag">🇹🇷</div><div class="lang-name" style="font-family:'Vazirmatn',sans-serif">Türkçe</div></div>
+    <div class="lang-btn" data-lang="ar" onclick="setLang('ar',this)"><div class="lang-flag">🇸🇦</div><div class="lang-name" style="font-family:'Vazirmatn',sans-serif">العربية</div></div>
+    <div class="lang-btn" data-lang="zh" onclick="setLang('zh',this)"><div class="lang-flag">🇨🇳</div><div class="lang-name" style="font-family:'Vazirmatn',sans-serif">中文</div></div>
   </div>
 
   <div class="intro-content">
@@ -161,72 +176,172 @@
     });
   }
 
-  // Planets (2-3 decorative rotating planets)
+  // Planets — fewer, bigger, much more detailed for a premium look
   const planets = [
-    { xr: 0.82, yr: 0.24, radius: 46, color: '#ffb454', ring: true,  rot: 0, speed: 0.0025, tilt: -0.35 },
-    { xr: 0.12, yr: 0.72, radius: 30, color: '#8b5cf6', ring: false, rot: 0, speed: 0.004,  tilt: 0 },
-    { xr: 0.90, yr: 0.78, radius: 18, color: '#34d399', ring: false, rot: 0, speed: -0.006, tilt: 0 }
+    {
+      xr: 0.84, yr: 0.26, radius: 72,
+      base: '#e08a3c', shade: '#5c2c0c', high: '#ffe9c4',
+      bands: ['#c9722f','#e6a35c','#a85a22','#f2b876','#8a4519'],
+      ring: true, ringColor: '#e8c99a', ringTilt: -0.38,
+      rot: 0, spin: 0.0016, atmosphere: '#ffb56b'
+    },
+    {
+      xr: 0.10, yr: 0.70, radius: 34,
+      base: '#7c4fd8', shade: '#20103f', high: '#e4d4ff',
+      bands: ['#6a3fc4','#8f68e6','#4b2a9e'],
+      ring: false, rot: 0, spin: 0.0026, atmosphere: '#a78bfa',
+      moon: { r: 7, dist: 58, speed: 0.012, color: '#cbd5e1' }
+    },
+    {
+      xr: 0.92, yr: 0.80, radius: 20,
+      base: '#22c17a', shade: '#063d26', high: '#baf7d8',
+      bands: ['#1ba368','#2fe093'],
+      ring: false, rot: 0, spin: -0.003, atmosphere: '#4ade80'
+    }
   ];
 
   function drawPlanet(p){
     const cx = p.xr * W, cy = p.yr * H;
-    p.rot += p.speed;
+    p.rot += p.spin;
 
-    // soft glow
-    const glow = ctx.createRadialGradient(cx, cy, p.radius*0.2, cx, cy, p.radius*2.2);
-    glow.addColorStop(0, p.color + '33');
+    // outer atmospheric glow
+    const glow = ctx.createRadialGradient(cx, cy, p.radius*0.6, cx, cy, p.radius*2.6);
+    glow.addColorStop(0, p.atmosphere + '2e');
+    glow.addColorStop(0.5, p.atmosphere + '12');
     glow.addColorStop(1, 'transparent');
     ctx.fillStyle = glow;
     ctx.beginPath();
-    ctx.arc(cx, cy, p.radius * 2.2, 0, Math.PI*2);
+    ctx.arc(cx, cy, p.radius * 2.6, 0, Math.PI*2);
     ctx.fill();
 
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(p.rot * 0.15);
+    // ring behind planet
+    if (p.ring) drawRing(p, cx, cy, false);
 
-    // ring (drawn behind, tilted ellipse) for the first planet
-    if (p.ring){
-      ctx.save();
-      ctx.rotate(p.tilt);
-      ctx.strokeStyle = p.color + '99';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, p.radius * 1.7, p.radius * 0.5, 0, 0, Math.PI*2);
-      ctx.stroke();
-      ctx.restore();
+    // moon behind or in front depending on orbit phase
+    let moonX, moonY, moonBehind = false;
+    if (p.moon){
+      p.moon.a = (p.moon.a || 0) + p.moon.speed;
+      moonX = cx + Math.cos(p.moon.a) * p.moon.dist;
+      moonY = cy + Math.sin(p.moon.a) * p.moon.dist * 0.4;
+      moonBehind = Math.sin(p.moon.a) < 0;
+      if (moonBehind) drawMoon(p, moonX, moonY);
     }
 
-    // planet body with simple shaded bands for a 3D feel
-    const bodyGrad = ctx.createRadialGradient(-p.radius*0.35, -p.radius*0.35, p.radius*0.1, 0, 0, p.radius);
-    bodyGrad.addColorStop(0, '#ffffffcc');
-    bodyGrad.addColorStop(0.25, p.color);
-    bodyGrad.addColorStop(1, '#00000088');
-    ctx.fillStyle = bodyGrad;
+    ctx.save();
     ctx.beginPath();
-    ctx.arc(0, 0, p.radius, 0, Math.PI*2);
-    ctx.fill();
+    ctx.arc(cx, cy, p.radius, 0, Math.PI*2);
+    ctx.clip();
 
-    // subtle rotating band texture
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = '#00000055';
-    for (let i=-2;i<=2;i++){
+    // base sphere gradient (gives roundness)
+    const sphere = ctx.createRadialGradient(
+      cx - p.radius*0.4, cy - p.radius*0.42, p.radius*0.05,
+      cx, cy, p.radius*1.15
+    );
+    sphere.addColorStop(0, p.high);
+    sphere.addColorStop(0.35, p.base);
+    sphere.addColorStop(0.75, p.base);
+    sphere.addColorStop(1, p.shade);
+    ctx.fillStyle = sphere;
+    ctx.fillRect(cx-p.radius, cy-p.radius, p.radius*2, p.radius*2);
+
+    // horizontal rotating surface bands, curved to follow sphere
+    ctx.globalAlpha = 0.55;
+    const bandCount = p.bands.length;
+    for (let i=0;i<bandCount;i++){
+      const t = (i/bandCount) + (p.rot*0.05) % 1;
+      const yOff = (((t % 1) + 1) % 1 - 0.5) * p.radius * 2;
+      const rowH = p.radius * (0.16 + Math.cos(yOff/p.radius*1.4) * 0.05);
+      const curveShrink = Math.cos((yOff / p.radius) * 1.4);
+      const rowW = p.radius * 1.05 * Math.max(0.15, Math.abs(curveShrink));
+      ctx.fillStyle = p.bands[i % p.bands.length];
       ctx.beginPath();
-      ctx.ellipse(0, i*p.radius*0.32, p.radius*0.95, p.radius*0.13, p.rot, 0, Math.PI*2);
+      ctx.ellipse(cx, cy + yOff, rowW, Math.max(1.5, rowH*0.5), 0, 0, Math.PI*2);
       ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    if (p.ring){
-      ctx.save();
-      ctx.rotate(p.tilt);
-      ctx.strokeStyle = p.color + 'ee';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, p.radius * 1.7, p.radius * 0.5, 0, Math.PI, Math.PI*2);
-      ctx.stroke();
-      ctx.restore();
-    }
+    // terminator shading (day/night curve) for a real 3D sphere feel
+    const term = ctx.createRadialGradient(
+      cx + p.radius*0.55, cy + p.radius*0.55, p.radius*0.1,
+      cx + p.radius*0.2, cy + p.radius*0.2, p.radius*1.3
+    );
+    term.addColorStop(0, 'rgba(0,0,0,0.55)');
+    term.addColorStop(0.6, 'rgba(0,0,0,0.15)');
+    term.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = term;
+    ctx.fillRect(cx-p.radius, cy-p.radius, p.radius*2, p.radius*2);
+
+    // rim light on the opposite edge (subtle backlight)
+    ctx.strokeStyle = p.high + '55';
+    ctx.lineWidth = p.radius*0.06;
+    ctx.beginPath();
+    ctx.arc(cx, cy, p.radius*0.97, Math.PI*1.15, Math.PI*1.55);
+    ctx.stroke();
+
+    // specular highlight
+    const spec = ctx.createRadialGradient(
+      cx - p.radius*0.42, cy - p.radius*0.46, 0,
+      cx - p.radius*0.42, cy - p.radius*0.46, p.radius*0.5
+    );
+    spec.addColorStop(0, 'rgba(255,255,255,0.5)');
+    spec.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = spec;
+    ctx.beginPath();
+    ctx.arc(cx - p.radius*0.42, cy - p.radius*0.46, p.radius*0.5, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.restore();
+
+    // crisp thin outline so it doesn't blend into background
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, p.radius, 0, Math.PI*2);
+    ctx.stroke();
+
+    if (p.ring) drawRing(p, cx, cy, true);
+    if (p.moon && !moonBehind) drawMoon(p, moonX, moonY);
+  }
+
+  function drawMoon(p, mx, my){
+    const g = ctx.createRadialGradient(mx-p.moon.r*0.4, my-p.moon.r*0.4, 0, mx, my, p.moon.r);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(1, p.moon.color);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(mx, my, p.moon.r, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  function drawRing(p, cx, cy, front){
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(p.ringTilt);
+    const rOuter = p.radius * 1.9;
+    const rInner = p.radius * 1.25;
+
+    const startAngle = front ? Math.PI : 0;
+    const endAngle = front ? Math.PI*2 : Math.PI;
+
+    const grad = ctx.createLinearGradient(-rOuter, 0, rOuter, 0);
+    grad.addColorStop(0, p.ringColor + '00');
+    grad.addColorStop(0.25, p.ringColor + 'aa');
+    grad.addColorStop(0.5, p.ringColor + '55');
+    grad.addColorStop(0.75, p.ringColor + 'aa');
+    grad.addColorStop(1, p.ringColor + '00');
+
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = (rOuter - rInner) * 0.5;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, (rOuter+rInner)/2, (rOuter+rInner)/2 * 0.28, 0, startAngle, endAngle);
+    ctx.stroke();
+
+    // thin bright edge line
+    ctx.strokeStyle = p.ringColor + '66';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rOuter, rOuter*0.28, 0, startAngle, endAngle);
+    ctx.stroke();
 
     ctx.restore();
   }
