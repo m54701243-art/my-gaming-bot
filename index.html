@@ -1,11 +1,349 @@
 <!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
-<body style="background:black;color:white;">
-<h1 id="t">تست</h1>
-<button onclick="document.getElementById('t').style.color='red'">بزن</button>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Galaxy Intro</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Vazirmatn',sans-serif;}
+
+  /* ===== INTRO WRAPPER ===== */
+  #intro{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+
+  /* Canvas layers */
+  #galaxy-cv{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+
+  /* ===== LANGUAGE SWITCHER (top-left) ===== */
+  .lang-row{position:absolute;top:16px;left:16px;display:flex;gap:8px;z-index:5;flex-wrap:wrap;}
+  .lang-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 8px;border-radius:10px;border:1px solid #ffffff22;background:#ffffff11;backdrop-filter:blur(6px);transition:0.2s;}
+  .lang-btn:hover{background:#ffffff1c;}
+  .lang-btn.active{border-color:#fff;background:#ffffff26;box-shadow:0 0 12px #a855f755;}
+  .lang-flag{font-size:1.5rem;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .lang-name{font-size:0.56rem;color:#ffffff88;letter-spacing:0.5px;}
+  .lang-btn.active .lang-name{color:#fff;}
+
+  /* ===== TITLE + CONTENT ===== */
+  .intro-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;gap:18px;padding:20px;text-align:center;}
+
+  .title-wrap{position:relative;}
+  .pixel-guard-title{
+    font-family:'Orbitron',sans-serif;
+    font-weight:900;
+    font-size:clamp(2.2rem,9vw,4.2rem);
+    letter-spacing:5px;
+    line-height:1.1;
+    background:linear-gradient(180deg,#ffffff 0%,#d9c6ff 35%,#a855f7 70%,#6d28d9 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    position:relative;
+    filter:drop-shadow(0 0 18px #a855f7cc) drop-shadow(0 0 40px #7c3aed88);
+    transform:perspective(400px) rotateX(8deg);
+    animation:floatTitle 4s ease-in-out infinite;
+  }
+  .pixel-guard-title::after{
+    content:attr(data-text);
+    position:absolute;left:0;top:0;width:100%;
+    font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:5px;
+    background:none;-webkit-text-fill-color:transparent;
+    color:transparent;
+    -webkit-text-stroke:1px #ffffff33;
+    z-index:-1;
+    transform:translate(3px,5px);
+  }
+  @keyframes floatTitle{
+    0%,100%{transform:perspective(400px) rotateX(8deg) translateY(0px);}
+    50%{transform:perspective(400px) rotateX(4deg) translateY(-6px);}
+  }
+
+  .welcome-small{font-family:'Orbitron',sans-serif;font-size:clamp(0.5rem,2.2vw,0.75rem);color:#c4b5fdaa;letter-spacing:7px;margin-top:-6px;}
+  .welcome-sub{font-size:clamp(0.95rem,3.2vw,1.15rem);color:#e9d5ff;letter-spacing:1px;font-weight:700;}
+
+  .intro-start{
+    font-family:'Vazirmatn',sans-serif;font-size:clamp(1rem,3.5vw,1.25rem);font-weight:900;
+    background:linear-gradient(135deg,#6d28d9,#a855f7);
+    color:#fff;border:2px solid #c084fc77;
+    padding:16px 58px;border-radius:50px;cursor:pointer;letter-spacing:2px;
+    display:flex;align-items:center;gap:10px;
+    box-shadow:0 0 30px #a855f755, inset 0 1px 0 #ffffff44;
+    transition:0.2s;margin-top:10px;
+    position:relative;z-index:10;
+  }
+  .intro-start:hover{transform:scale(1.05);box-shadow:0 0 50px #a855f7aa, inset 0 1px 0 #ffffff44;}
+  .intro-start:active{transform:scale(0.96);}
+  .intro-start .arrow{transition:transform 0.2s;}
+  .intro-start:hover .arrow{transform:translateX(-4px);}
+
+  /* ===== APP placeholder (what intro leads to) ===== */
+  #app{display:none;height:100vh;width:100%;background:#0d0b1a;color:#e9d5ff;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-family:'Vazirmatn',sans-serif;}
+  #app.show{display:flex;}
+  #app h1{font-family:'Orbitron',sans-serif;color:#a855f7;letter-spacing:2px;}
+  #app button{background:#1e1840;color:#a855f7;border:1px solid #2d1b69;padding:10px 22px;border-radius:20px;cursor:pointer;font-family:'Vazirmatn',sans-serif;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- ============ INTRO ============ -->
+<div id="intro">
+  <canvas id="galaxy-cv"></canvas>
+
+  <div class="lang-row">
+    <div class="lang-btn active" data-lang="en" onclick="setLang('en',this)"><div class="lang-flag">🇬🇧</div><div class="lang-name">English</div></div>
+    <div class="lang-btn" data-lang="fa" onclick="setLang('fa',this)"><div class="lang-flag">🇮🇷</div><div class="lang-name">فارسی</div></div>
+    <div class="lang-btn" data-lang="tr" onclick="setLang('tr',this)"><div class="lang-flag">🇹🇷</div><div class="lang-name">Türkçe</div></div>
+    <div class="lang-btn" data-lang="ar" onclick="setLang('ar',this)"><div class="lang-flag">🇸🇦</div><div class="lang-name">العربية</div></div>
+    <div class="lang-btn" data-lang="zh" onclick="setLang('zh',this)"><div class="lang-flag">🇨🇳</div><div class="lang-name">中文</div></div>
+  </div>
+
+  <div class="intro-content">
+    <div class="title-wrap">
+      <div class="pixel-guard-title" id="i-title" data-text="PIXEL GUARD">PIXEL GUARD</div>
+    </div>
+    <div class="welcome-small" id="i-welcome">WELCOME</div>
+    <div class="welcome-sub" id="i-sub">Welcome, traveler</div>
+    <button class="intro-start" onclick="enterApp()">
+      <span id="i-start-txt">Enter Lobby</span><span class="arrow">▶</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============ APP (placeholder — replace with your real lobby) ============ -->
+<div id="app">
+  <h1>🎮 Lobby loaded successfully</h1>
+  <p>این صفحه فقط برای تست دکمه‌ست — لابی واقعیت رو اینجا وصل می‌کنیم.</p>
+  <button onclick="backToIntro()">← Back to intro</button>
+</div>
+
 <script>
-document.getElementById('t').textContent = 'JS کار میکنه!';
+/* ======================================================
+   GALAXY BACKGROUND ANIMATION
+   Stars + drifting nebula clouds + a couple of slowly
+   orbiting "planets" + occasional shooting stars.
+====================================================== */
+(function(){
+  const cv = document.getElementById('galaxy-cv');
+  const ctx = cv.getContext('2d');
+  let W, H;
+
+  function resize(){
+    W = cv.width = window.innerWidth;
+    H = cv.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Starfield
+  const STAR_COUNT = 220;
+  const stars = [];
+  for (let i = 0; i < STAR_COUNT; i++){
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.4 + 0.3,
+      tw: Math.random() * Math.PI * 2,
+      sp: Math.random() * 0.02 + 0.008
+    });
+  }
+
+  // Nebula blobs
+  const NEB_COLORS = ['#a855f7','#7c3aed','#ec4899','#3b82f6','#06b6d4'];
+  const nebulas = [];
+  for (let i = 0; i < 7; i++){
+    nebulas.push({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 220 + 140,
+      c: NEB_COLORS[i % NEB_COLORS.length],
+      dx: (Math.random() - 0.5) * 0.00015,
+      dy: (Math.random() - 0.5) * 0.00015
+    });
+  }
+
+  // Planets (2-3 decorative rotating planets)
+  const planets = [
+    { xr: 0.82, yr: 0.24, radius: 46, color: '#ffb454', ring: true,  rot: 0, speed: 0.0025, tilt: -0.35 },
+    { xr: 0.12, yr: 0.72, radius: 30, color: '#8b5cf6', ring: false, rot: 0, speed: 0.004,  tilt: 0 },
+    { xr: 0.90, yr: 0.78, radius: 18, color: '#34d399', ring: false, rot: 0, speed: -0.006, tilt: 0 }
+  ];
+
+  function drawPlanet(p){
+    const cx = p.xr * W, cy = p.yr * H;
+    p.rot += p.speed;
+
+    // soft glow
+    const glow = ctx.createRadialGradient(cx, cy, p.radius*0.2, cx, cy, p.radius*2.2);
+    glow.addColorStop(0, p.color + '33');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, p.radius * 2.2, 0, Math.PI*2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(p.rot * 0.15);
+
+    // ring (drawn behind, tilted ellipse) for the first planet
+    if (p.ring){
+      ctx.save();
+      ctx.rotate(p.tilt);
+      ctx.strokeStyle = p.color + '99';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.radius * 1.7, p.radius * 0.5, 0, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // planet body with simple shaded bands for a 3D feel
+    const bodyGrad = ctx.createRadialGradient(-p.radius*0.35, -p.radius*0.35, p.radius*0.1, 0, 0, p.radius);
+    bodyGrad.addColorStop(0, '#ffffffcc');
+    bodyGrad.addColorStop(0.25, p.color);
+    bodyGrad.addColorStop(1, '#00000088');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.arc(0, 0, p.radius, 0, Math.PI*2);
+    ctx.fill();
+
+    // subtle rotating band texture
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = '#00000055';
+    for (let i=-2;i<=2;i++){
+      ctx.beginPath();
+      ctx.ellipse(0, i*p.radius*0.32, p.radius*0.95, p.radius*0.13, p.rot, 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (p.ring){
+      ctx.save();
+      ctx.rotate(p.tilt);
+      ctx.strokeStyle = p.color + 'ee';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.radius * 1.7, p.radius * 0.5, 0, Math.PI, Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  let shootingStar = null;
+
+  function spawnShootingStar(){
+    shootingStar = {
+      x: Math.random() * W * 0.6 + W*0.2,
+      y: Math.random() * H * 0.3,
+      len: 90 + Math.random()*120,
+      speed: 9 + Math.random()*6,
+      angle: Math.PI * 0.22,
+      life: 1
+    };
+  }
+
+  function draw(){
+    ctx.fillStyle = '#020103';
+    ctx.fillRect(0, 0, W, H);
+
+    // nebula clouds
+    nebulas.forEach(n => {
+      n.x += n.dx; n.y += n.dy;
+      if (n.x < -0.2) n.x = 1.2; if (n.x > 1.2) n.x = -0.2;
+      if (n.y < -0.2) n.y = 1.2; if (n.y > 1.2) n.y = -0.2;
+      const cx = n.x * W, cy = n.y * H;
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, n.r);
+      g.addColorStop(0, n.c + '22');
+      g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, n.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+
+    // planets
+    planets.forEach(drawPlanet);
+
+    // stars (twinkle)
+    stars.forEach(s => {
+      s.tw += s.sp;
+      const bri = 0.35 + Math.abs(Math.sin(s.tw)) * 0.65;
+      ctx.globalAlpha = bri;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    // shooting star
+    if (!shootingStar && Math.random() < 0.01) spawnShootingStar();
+    if (shootingStar){
+      const s = shootingStar;
+      const dx = Math.cos(s.angle) * s.len;
+      const dy = Math.sin(s.angle) * s.len;
+      const grad = ctx.createLinearGradient(s.x, s.y, s.x - dx, s.y - dy);
+      grad.addColorStop(0, '#ffffffee');
+      grad.addColorStop(1, 'transparent');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x - dx, s.y - dy);
+      ctx.stroke();
+
+      s.x += Math.cos(s.angle) * s.speed;
+      s.y += Math.sin(s.angle) * s.speed;
+      s.life -= 0.012;
+      if (s.life <= 0 || s.x > W + 50 || s.y > H + 50) shootingStar = null;
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+/* ======================================================
+   LANGUAGE SWITCHER
+====================================================== */
+const TXT = {
+  en: { welcome:'WELCOME',      sub:'Welcome, traveler',        start:'Enter Lobby',   dir:'ltr' },
+  fa: { welcome:'خوش آمدید',    sub:'خوش اومدی، مسافر',          start:'ورود به لابی',  dir:'rtl' },
+  tr: { welcome:'HOŞ GELDİN',   sub:'Hoş geldin, gezgin',        start:'Lobiye Gir',    dir:'ltr' },
+  ar: { welcome:'أهلاً وسهلاً', sub:'أهلاً بك أيها المسافر',      start:'ادخل اللوبي',   dir:'rtl' },
+  zh: { welcome:'欢迎',         sub:'欢迎你，旅行者',              start:'进入大厅',       dir:'ltr' }
+};
+
+function setLang(lang, el){
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  const d = TXT[lang] || TXT.en;
+  document.getElementById('i-welcome').textContent = d.welcome;
+  document.getElementById('i-sub').textContent = d.sub;
+  document.getElementById('i-start-txt').textContent = d.start;
+  document.documentElement.setAttribute('dir', d.dir);
+  document.documentElement.setAttribute('lang', lang);
+}
+
+/* ======================================================
+   ENTER LOBBY BUTTON
+====================================================== */
+function enterApp(){
+  const intro = document.getElementById('intro');
+  const app = document.getElementById('app');
+  if (intro) intro.style.display = 'none';
+  if (app) app.classList.add('show');
+}
+
+function backToIntro(){
+  const intro = document.getElementById('intro');
+  const app = document.getElementById('app');
+  if (app) app.classList.remove('show');
+  if (intro) intro.style.display = 'flex';
+}
 </script>
 </body>
 </html>
